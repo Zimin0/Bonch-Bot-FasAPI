@@ -1,12 +1,24 @@
-from db.base_class import Base
 from sqlalchemy import Column, Integer, Time, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import declared_attr, relationship, declarative_mixin
 
-class BaseTimePeriod(Base):
-    __abstract__ = True
-    id = Column(Integer, primary_key=True, index=True, unique=True)
-    time_start = Column(Time, nullable=False)
-    time_end = Column(Time, nullable=False)
-    computer_id = Column(Integer, ForeignKey("computers.id"), nullable=False)
+@declarative_mixin
+class BaseTimePeriod:
+    @declared_attr
+    def id(cls):
+        return Column(Integer, primary_key=True, index=True, unique=True)
 
-    computer = relationship("Computer")
+    @declared_attr
+    def time_start(cls):
+        return Column(Time, nullable=False)
+
+    @declared_attr
+    def time_end(cls):
+        return Column(Time, nullable=False)
+
+    @declared_attr
+    def computer_id(cls):
+        return Column(Integer, ForeignKey("computers.id"), nullable=False)
+
+    @declared_attr
+    def computer(cls):
+        return relationship("Computer")

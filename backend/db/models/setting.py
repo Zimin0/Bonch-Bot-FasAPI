@@ -5,7 +5,7 @@ class Setting(Base):
     """ Кастомные настройки приложения. """
     id = Column(Integer, primary_key=True, index=True, unique=True)
     name = Column(String, nullable=False)
-    slug = Column(Integer, unique=True)
+    slug = Column(String, unique=True, nullable=False)
     value = Column(String, nullable=False)
 
  
