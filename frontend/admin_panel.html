@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Settings</title>
+    <script>
+        async function addSetting() {
+            const name = document.getElementById("new-name").value;
+            const slug = document.getElementById("new-slug").value;
+            const value = document.getElementById("new-value").value;
+
+            const response = await fetch('/admin/settings', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, slug, value }),
+            });
+
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert("Error adding setting");
+            }
+        }
+
+        async function updateSetting(id) {
+            const name = document.getElementById(`name-${id}`).value;
+            const value = document.getElementById(`value-${id}`).value;
+
+            const response = await fetch(`/admin/settings/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, value }),
+            });
+
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert("Error updating setting");
+            }
+        }
+
+        async function deleteSetting(id) {
+            const response = await fetch(`/admin/settings/${id}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert("Error deleting setting");
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Admin Settings</h1>
+
+    <h2>Add New Setting</h2>
+    <form onsubmit="event.preventDefault(); addSetting();">
+        <label for="new-name">Name:</label>
+        <input type="text" id="new-name" required>
+        <label for="new-slug">Slug:</label>
+        <input type="number" id="new-slug" required>
+        <label for="new-value">Value:</label>
+        <input type="text" id="new-value" required>
+        <button type="submit">Add</button>
+    </form>
+
+    <h2>Existing Settings</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Slug</th>
+                <th>Value</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for setting in settings %}
+            <tr>
+                <td><input type="text" id="name-{{ setting.id }}" value="{{ setting.name }}"></td>
+                <td>{{ setting.slug }}</td>
+                <td><input type="text" id="value-{{ setting.id }}" value="{{ setting.value }}"></td>
+                <td>
+                    <button onclick="updateSetting({{ setting.id }})">Update</button>
+                    <button onclick="deleteSetting({{ setting.id }})">Delete</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

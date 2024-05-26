@@ -2,3 +2,6 @@
 
 from db.base_class import Base 
 from db.models.user import User
+from db.models.pc import PC
+from db.models.session import Session
+from db.models.time_period import TimePeriod
