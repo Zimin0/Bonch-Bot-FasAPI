@@ -7,7 +7,6 @@ from db.session import get_db
 from db.models.setting import Setting
 from schemas.setting import SettingCreate, SettingUpdate
 from db.models.user import User
-
 from apis.v1.dependencies import get_current_active_superuser
 
 router = APIRouter()
@@ -17,6 +16,7 @@ templates = Jinja2Templates(directory="templates")
 @router.get("/admin/settings", response_class=HTMLResponse)
 async def read_settings(request: Request, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
     settings = db.query(Setting).all()
+    print(f"Accessing settings: user={current_user.email}, is_superuser={current_user.is_superuser}")
     return templates.TemplateResponse("settings.html", {"request": request, "settings": settings})
 
 @router.get("/admin/settings/slug/{setting_slug}")

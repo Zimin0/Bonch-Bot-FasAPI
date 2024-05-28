@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Доступ запрещен</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .menu {
+            background-color: #808080; /* Серый цвет */
+            overflow: hidden;
+            padding: 10px 0;
+        }
+        .menu a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        .menu a:hover {
+            background-color: #575757; /* Темно-серый при наведении */
+            transition: background-color 0.3s;
+        }
+        h1 {
+            color: #404040; /* Темно-серый для заголовков */
+            text-align: center;
+        }
+        .container {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            text-align: center;
+        }
+        p {
+            font-size: 18px;
+            color: #606060;
+        }
+        a.button {
+            text-decoration: none;
+            color: white;
+            background-color: #808080; /* Серый цвет для кнопок */
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        a.button:hover {
+            background-color: #575757; /* Темно-серый при наведении */
+        }
+    </style>
+</head>
+<body>
+    <div class="menu">
+        <a href="/">Главная</a>
+        <a href="/admin/settings">Админ панель</a>
+        <a href="/login">Вход</a>
+        <a href="/register">Регистрация</a>
+        <a href="/logout">Выйти</a>
+        <a href="/book">Бронирование</a>
+    </div>
+
+    <h1>403 - Доступ запрещен</h1>
+    <div class="container">
+        <p>У вас нет прав для доступа к этой странице.</p>
+        <a href="/" class="button">На главную</a>
+    </div>
+</body>
+</html>

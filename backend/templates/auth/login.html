@@ -85,12 +85,17 @@
         async function loginUser() {
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
+            
+            const formData = new URLSearchParams();
+            formData.append('username', email);
+            formData.append('password', password);
+
             const response = await fetch('/token', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: JSON.stringify({ username: email, password }),
+                body: formData.toString(),
             });
 
             if (response.ok) {
