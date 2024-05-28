@@ -20,7 +20,11 @@ templates = Jinja2Templates(directory="templates")
 
 @router.get('/login', response_class=HTMLResponse)
 async def show_login_page(request: Request, db: Session = Depends(get_db)):
-    return templates.TemplateResponse("login/login.html", {'request':request})
+    return templates.TemplateResponse("auth/login.html", {'request':request})
+
+@router.get('/register', response_class=HTMLResponse)
+async def show_register_page(request: Request, db: Session = Depends(get_db)):
+    return templates.TemplateResponse('auth/register.html', {'request': request})
 
 @router.post("/token", response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session= Depends(get_db)):

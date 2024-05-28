@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Регистрация</title>
+    <title>Вход</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -25,6 +25,7 @@
         }
         h1, h2 {
             color: #404040; /* Темно-серый для заголовков */
+            text-align: center;
         }
         form {
             max-width: 400px;
@@ -61,44 +62,44 @@
 </head>
 <body>
     <div class="menu">
-        <a href="#home">Главная</a>
-        <a href="#login">Вход</a>
-        <a href="#register">Регистрация</a>
+        <a href="/">Главная</a>
+        <a href="/admin/settings">Админ панель</a>
+        <a href="/login">Вход</a>
+        <a href="/register">Регистрация</a>
+        <a href="/logout">Выйти</a>
+        <a href="/book">Бронирование</a>
     </div>
 
-    <h1>Регистрация</h1>
-    <form onsubmit="event.preventDefault(); registerUser();">
+    <h1>Вход</h1>
+    <form onsubmit="event.preventDefault(); loginUser();">
         <label for="email">Электронная почта:</label>
         <input type="email" id="email" required>
-        
-        <label for="tg_tag">Телеграм Тег:</label>
-        <input type="text" id="tg_tag">
         
         <label for="password">Пароль:</label>
         <input type="password" id="password" required>
         
-        <button type="submit">Зарегистрироваться</button>
+        <button type="submit">Войти</button>
     </form>
 
     <script>
-        async function registerUser() {
+        async function loginUser() {
             const email = document.getElementById("email").value;
-            const tg_tag = document.getElementById("tg_tag").value;
             const password = document.getElementById("password").value;
-
-            const response = await fetch('/register', {
+            const response = await fetch('/token', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email, tg_tag, password }),
+                body: JSON.stringify({ username: email, password }),
             });
 
             if (response.ok) {
-                alert("Регистрация успешна");
-                window.location.href = "/login";
+                const data = await response.json();
+                alert("Вход выполнен успешно");
+                window.localStorage.setItem('token', data.access_token);
+                window.location.href = "/";
             } else {
-                alert("Ошибка регистрации");
+                alert("Ошибка входа");
             }
         }
     </script>
