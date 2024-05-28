@@ -1,7 +1,60 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin Settings</title>
+    <title>Настройки Администратора</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .menu {
+            background-color: #808080; /* Серый цвет */
+            overflow: hidden;
+            padding: 10px 0;
+        }
+        .menu a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        .menu a:hover {
+            background-color: #575757; /* Темно-серый при наведении */
+            transition: background-color 0.3s;
+        }
+        h1, h2 {
+            color: #404040; /* Темно-серый для заголовков */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+            color: #404040; /* Темно-серый для текста таблицы */
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+
+        button {
+            padding: 5px 10px;
+            color: white;
+            background-color: #808080; /* Серый цвет для кнопок */
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #575757; /* Темно-серый при наведении */
+            transition: background-color 0.3s;
+        }
+    </style>
     <script>
         async function addSetting() {
             const name = document.getElementById("new-name").value;
@@ -19,7 +72,7 @@
             if (response.ok) {
                 location.reload();
             } else {
-                alert("Error adding setting");
+                alert("Ошибка добавления настройки");
             }
         }
 
@@ -39,7 +92,7 @@
             if (response.ok) {
                 location.reload();
             } else {
-                alert("Error updating setting");
+                alert("Ошибка обновления настройки");
             }
         }
 
@@ -51,33 +104,41 @@
             if (response.ok) {
                 location.reload();
             } else {
-                alert("Error deleting setting");
+                alert("Ошибка удаления настройки");
             }
         }
     </script>
 </head>
 <body>
-    <h1>Admin Settings</h1>
+    <div class="menu">
+        <a href="#home">Главная</a>
+        <a href="#settings">Настройки</a>
+        <a href="#profile">Профиль</a>
+        <a href="#logout">Выйти</a>
+        <a href="#logout">Бронирование</a>
+    </div>
 
-    <h2>Add New Setting</h2>
+    <h1>Настройки Администратора</h1>
+
+    <h2>Добавить новую настройку</h2>
     <form onsubmit="event.preventDefault(); addSetting();">
-        <label for="new-name">Name:</label>
+        <label for="new-name">Имя:</label>
         <input type="text" id="new-name" required>
-        <label for="new-slug">Slug:</label>
+        <label for="new-slug">Слаг:</label>
         <input type="text" id="new-slug" required>
-        <label for="new-value">Value:</label>
+        <label for="new-value">Значение:</label>
         <input type="text" id="new-value" required>
-        <button type="submit">Add</button>
+        <button type="submit">Добавить</button>
     </form>
 
-    <h2>Existing Settings</h2>
+    <h2>Существующие настройки</h2>
     <table>
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Slug</th>
-                <th>Value</th>
-                <th>Actions</th>
+                <th>Имя</th>
+                <th>Слаг</th>
+                <th>Значение</th>
+                <th>Действия</th>
             </tr>
         </thead>
         <tbody>
@@ -87,8 +148,8 @@
                 <td><input type="text" id="slug-{{ setting.id }}" value="{{ setting.slug }}"></td>
                 <td><input type="text" id="value-{{ setting.id }}" value="{{ setting.value }}"></td>
                 <td>
-                    <button onclick="updateSetting({{ setting.id }})">Update</button>
-                    <button onclick="deleteSetting({{ setting.id }})">Delete</button>
+                    <button onclick="updateSetting({{ setting.id }})">Обновить</button>
+                    <button onclick="deleteSetting({{ setting.id }})">Удалить</button>
                 </td>
             </tr>
             {% endfor %}

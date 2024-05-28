@@ -1,5 +1,5 @@
 from fastapi.security import OAuth2PasswordRequestForm
-from fastapi import Depends,APIRouter
+from fastapi import Depends, APIRouter, Request
 from sqlalchemy.orm import Session
 from fastapi import status, HTTPException
 
@@ -11,21 +11,19 @@ from core.security import create_access_token
 from jose import JWTError, jwt 
 from core.config import settings
 from fastapi.security import OAuth2PasswordRequestForm,OAuth2PasswordBearer
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
 
 router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
+templates = Jinja2Templates(directory="templates")
 
-def authenticate_user(email: str, password: str,db: Session):
-    user = get_user(email=email,db=db)
-    print(user)
-    if not user:
-        return False
-    if not Hasher.verify_password(password, user.password):
-        return False
-    return user
+@router.get('/login', response_class=HTMLResponse)
+async def show_login_page(request: Request, db: Session = Depends(get_db)):
+    return templates.TemplateResponse("login/login.html", {'request':request})
 
 @router.post("/token", response_model=Token)
-def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session= Depends(get_db)):
+async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session= Depends(get_db)):
     user = authenticate_user(form_data.username, form_data.password,db)
     if not user:
         raise HTTPException(
@@ -53,4 +51,13 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session= Depends(g
     user = get_user(email=username, db=db)
     if user is None:
         raise credentials_exception
+    return user
+
+def authenticate_user(email: str, password: str,db: Session):
+    user = get_user(email=email,db=db)
+    print(user)
+    if not user:
+        return False
+    if not Hasher.verify_password(password, user.password):
+        return False
     return user
