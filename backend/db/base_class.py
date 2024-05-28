@@ -8,6 +8,6 @@ class Base:
     id: Any
     __name__: str
 
-    @declared_attr # чтобы имя таблицы совпадало с именем класса
-    def __tablename__(cls) -> str:
-        return cls.__name__.lower()
+    # @declared_attr # чтобы имя таблицы совпадало с именем класса
+    # def __tablename__(cls) -> str:
+    #     return cls.__name__.lower()
