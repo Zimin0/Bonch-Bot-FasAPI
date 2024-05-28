@@ -10,6 +10,9 @@ from db.repository.user import get_user
 from core.security import create_access_token
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
+from schemas.user import UserCreate, ShowUser
+from db.models.user import User
+from db.repository.user import create_new_user
 
 router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
@@ -22,6 +25,25 @@ async def show_login_page(request: Request, db: Session = Depends(get_db)):
 @router.get('/register', response_class=HTMLResponse)
 async def show_register_page(request: Request, db: Session = Depends(get_db)):
     return templates.TemplateResponse('auth/register.html', {'request': request})
+
+@router.post('/register', status_code=status.HTTP_201_CREATED)
+async def register_user(user: UserCreate, db: Session = Depends(get_db)):
+    existing_user = db.query(User).filter(User.email == user.email).first()
+    if existing_user:
+        print("Такой пользователь уже существует.")
+        raise HTTPException(status_code=400, detail="User already exists")
+    
+    user_obj = User(
+        email=user.email,
+        tg_tag=user.tg_tag,
+        password=Hasher.get_password_hash(user.password),
+        is_active=True,
+        is_superuser=False
+    )
+    db.add(user_obj)
+    db.commit()
+    db.refresh(user_obj)
+    return user_obj
 
 @router.post("/token", response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):

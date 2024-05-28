@@ -10,6 +10,7 @@ from db.repository.user import get_user
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
 
 def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    """ Возвращает пользователя по токену. """
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Неверные данные для входа.",
@@ -34,9 +35,10 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
     return user
 
 def get_current_active_superuser(current_user: User = Depends(get_current_user)) -> User:
-    print(current_user.email)
+    """ Проверяет, является ли пользователь superuser'ом. """
     if not current_user.is_active:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Inactive user")
     if not current_user.is_superuser:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="The user doesn't have enough privileges")
+    print(f"User \"{current_user.email}\" is superuser.")
     return current_user
