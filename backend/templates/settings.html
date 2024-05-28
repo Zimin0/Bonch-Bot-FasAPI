@@ -61,7 +61,7 @@
             const slug = document.getElementById("new-slug").value;
             const value = document.getElementById("new-value").value;
 
-            const response = await fetch('/admin/settings', {
+            const response = await fetch('/admin/setting', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -81,7 +81,7 @@
             const slug = document.getElementById(`slug-${id}`).value;
             const value = document.getElementById(`value-${id}`).value;
 
-            const response = await fetch(`/admin/settings/${id}`, {
+            const response = await fetch(`/admin/setting/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -97,7 +97,7 @@
         }
 
         async function deleteSetting(id) {
-            const response = await fetch(`/admin/settings/${id}`, {
+            const response = await fetch(`/admin/setting/${id}`, {
                 method: 'DELETE',
             });
 
@@ -112,7 +112,7 @@
 <body>
     <div class="menu">
         <a href="/">Главная</a>
-        <a href="/admin/settings">Админ панель</a>
+        <a href="/admin/setting">Админ панель</a>
         <a href="/login">Вход</a>
         <a href="/register">Регистрация</a>
         <a href="/logout">Выйти</a>
