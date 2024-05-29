@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Настройки Администратора</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script type="module" src="script.js" defer></script>
+</head>
+<body onload="displaySettings()">
+    <div class="menu">
+        <a href="/">Главная</a>
+        <a href="/frontend/auth/settings">Админ панель</a>
+        <a href="/frontend/auth/login">Вход</a>
+        <a href="/frontend/auth/register">Регистрация</a>
+        <a href="/logout">Выйти</a>
+        <a href="/book">Бронирование</a>
+    </div>
+
+    <h1>Настройки Администратора</h1>
+
+    <h2>Добавить новую настройку</h2>
+    <form onsubmit="event.preventDefault(); addSetting();">
+        <label for="new-name">Имя:</label>
+        <input type="text" id="new-name" required>
+        <label for="new-slug">Слаг:</label>
+        <input type="text" id="new-slug" required>
+        <label for="new-value">Значение:</label>
+        <input type="text" id="new-value" required>
+        <button type="submit">Добавить</button>
+    </form>
+
+    <h2>Существующие настройки</h2>
+    <table id="settings-table">
+        <thead>
+            <tr>
+                <th>Имя</th>
+                <th>Слаг</th>
+                <th>Значение</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Настройки будут добавлены сюда динамически -->
+        </tbody>
+    </table>
+</body>
+</html>

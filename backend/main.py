@@ -6,6 +6,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.exception_handlers import http_exception_handler
 from core.config import settings
 from db.session import engine
+from fastapi.middleware.cors import CORSMiddleware
 from db.base import Base    
 
 from apis.base import api_router
@@ -25,6 +26,19 @@ def start_application():
     return app
 
 app = start_application()
+
+# origins = [
+#     "http://localhost:8080",
+#     "http://127.0.0.1:8080",
+# ]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.exception_handler(StarletteHTTPException)
 async def custom_http_exception_handler(request: Request, exc: StarletteHTTPException):

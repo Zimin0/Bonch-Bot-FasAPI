@@ -1,0 +1,55 @@
+body {
+    font-family: Arial, sans-serif;
+}
+.menu {
+    background-color: #808080; /* Серый цвет */
+    overflow: hidden;
+    padding: 10px 0;
+}
+.menu a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+.menu a:hover {
+    background-color: #575757; /* Темно-серый при наведении */
+    transition: background-color 0.3s;
+}
+h1, h2 {
+    text-align: center;
+    color: #404040; /* Темно-серый для заголовков */
+}
+form {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+}
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: #404040;
+}
+input[type="text"], input[type="email"], input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+button {
+    padding: 10px 15px;
+    color: white;
+    background-color: #808080; /* Серый цвет для кнопок */
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+button:hover {
+    background-color: #575757; /* Темно-серый при наведении */
+    transition: background-color 0.3s;
+}

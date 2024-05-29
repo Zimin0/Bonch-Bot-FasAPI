@@ -1,8 +1,5 @@
-from fastapi import APIRouter, status, Request, HTTPException, Depends
+from fastapi import APIRouter, Request, HTTPException, Depends
 from sqlalchemy.orm import Session
-from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
-from typing import List
 
 from db.session import get_db
 from db.models.setting import Setting
@@ -12,28 +9,23 @@ from apis.v1.dependencies import get_current_active_superuser
 
 router = APIRouter()
 
-templates = Jinja2Templates(directory="templates")
-
-@router.get("/admin/settings", response_class=HTMLResponse)
-async def read_settings(request: Request, db: Session = Depends(get_db)): # , current_user: User = Depends(get_current_active_superuser
-    settings = db.query(Setting).all()
-    # print(f"Accessing settings: user={current_user.email}, is_superuser={current_user.is_superuser}")
-    return templates.TemplateResponse("settings.html", {"request": request, "settings": settings})
+@router.get('/admin/settings/all', response_model=list[SettingGet])
+async def get_all_settings(request: Request, db: Session = Depends(get_db)):
+    """ GET all settings. """
+    all_settings = db.query(Setting).all() 
+    return all_settings
 
 @router.get("/admin/setting/slug/{setting_slug}")
 async def get_setting_by_slug(setting_slug: str, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
+    """ GET setting by slug. """
     db_setting = db.query(Setting).filter(Setting.slug == setting_slug).first()
     if db_setting is None:
         raise HTTPException(status_code=404, detail="Setting not found")
     return db_setting
 
-@router.get('/admin/settings/all', response_model=list[SettingGet])
-async def get_all_settings(request: Request, db: Session = Depends(get_db)):
-    all_settings = db.query(Setting).all() 
-    return all_settings
-
 @router.post("/admin/setting")
 async def create_setting(setting: SettingCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
+    """ POST create setting. """
     db_setting = Setting(name=setting.name, slug=setting.slug, value=setting.value)
     db.add(db_setting)
     db.commit()
@@ -42,6 +34,7 @@ async def create_setting(setting: SettingCreate, db: Session = Depends(get_db), 
 
 @router.put("/admin/setting/{setting_id}")
 async def update_setting(setting_id: int, setting: SettingUpdate, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
+    """ UPDATE setting. """
     db_setting = db.query(Setting).filter(Setting.id == setting_id).first()
     if db_setting is None:
         raise HTTPException(status_code=404, detail="Setting not found")
@@ -54,6 +47,7 @@ async def update_setting(setting_id: int, setting: SettingUpdate, db: Session = 
 
 @router.delete("/admin/setting/{setting_id}")
 async def delete_setting(setting_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
+    """ DELETE setting. """
     db_setting = db.query(Setting).filter(Setting.id == setting_id).first()
     if db_setting is None:
         raise HTTPException(status_code=404, detail="Setting not found")

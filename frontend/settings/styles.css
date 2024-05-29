@@ -1,0 +1,66 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.menu {
+    background-color: #808080; /* Серый цвет */
+    overflow: hidden;
+    padding: 10px 0;
+}
+
+.menu a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.menu a:hover {
+    background-color: #575757; /* Темно-серый при наведении */
+    transition: background-color 0.3s;
+}
+
+h1, h2 {
+    color: #404040; /* Темно-серый для заголовков */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ccc;
+    color: #404040; /* Темно-серый для текста таблицы */
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+button {
+    padding: 5px 10px;
+    color: white;
+    background-color: #808080; /* Серый цвет для кнопок */
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #575757; /* Темно-серый при наведении */
+    transition: background-color 0.3s;
+}
+
+.error {
+    color: red;
+    text-align: center;
+    margin-top: 20px;
+}
