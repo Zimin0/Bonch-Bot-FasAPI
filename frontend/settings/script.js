@@ -1,11 +1,49 @@
 import { base_api_url } from '../base_api_url.js';
 
+async function get_auth_token() {
+    // Подтягивает токен авторизации из локального хранилища.
+    const token = window.localStorage.getItem('token');
+    console.log(`token = ${token}`);
+    if (token) {
+        return token;
+    } else {
+        alert("Токен не найден. Вы не вошли в систему");
+        return null;
+    }
+}
+
+async function get_user_info(token) {
+    const response = await fetch(`${base_api_url}/user/me`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        }
+    });
+
+    if (response.ok) {
+        return await response.json();
+    } else {
+        console.error("Ошибка при получении информации о пользователе", response.status);
+        return null;
+    }
+}
+
 export async function displaySettings() {
     try {
+        const token = await get_auth_token();
+        if (!token) return;  // Прекращаем выполнение, если токен не найден
+
+        const user_info = await get_user_info(token);
+        if (user_info) {
+            document.getElementById("username").textContent = user_info.email;
+        }
+
         const response = await fetch(`${base_api_url}/admin/settings/all`, {
             method: "GET",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
             },
         });
         if (response.ok) {
@@ -42,6 +80,9 @@ function displayError(message) {
 }
 
 export async function addSetting() {
+    const token = await get_auth_token();
+    if (!token) return;
+
     const name = document.getElementById("new-name").value;
     const slug = document.getElementById("new-slug").value;
     const value = document.getElementById("new-value").value;
@@ -50,6 +91,7 @@ export async function addSetting() {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({ name, slug, value }),
     });
@@ -62,6 +104,9 @@ export async function addSetting() {
 }
 
 export async function updateSetting(id) {
+    const token = await get_auth_token();
+    if (!token) return;
+
     const name = document.getElementById(`name-${id}`).value;
     const slug = document.getElementById(`slug-${id}`).value;
     const value = document.getElementById(`value-${id}`).value;
@@ -70,6 +115,7 @@ export async function updateSetting(id) {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
+            "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({ name, slug, value }),
     });
@@ -82,8 +128,14 @@ export async function updateSetting(id) {
 }
 
 export async function deleteSetting(id) {
+    const token = await get_auth_token();
+    if (!token) return;
+
     const response = await fetch(`${base_api_url}/admin/setting/${id}`, {
         method: 'DELETE',
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
     });
 
     if (response.ok) {

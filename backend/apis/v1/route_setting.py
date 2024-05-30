@@ -10,7 +10,7 @@ from apis.v1.dependencies import get_current_active_superuser
 router = APIRouter()
 
 @router.get('/admin/settings/all', response_model=list[SettingGet])
-async def get_all_settings(request: Request, db: Session = Depends(get_db)):
+async def get_all_settings(request: Request, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
     """ GET all settings. """
     all_settings = db.query(Setting).all() 
     return all_settings

@@ -40,11 +40,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.exception_handler(StarletteHTTPException)
-async def custom_http_exception_handler(request: Request, exc: StarletteHTTPException):
-    if exc.status_code == 401:
-        return templates.TemplateResponse("401.html", {"request": request}, status_code=exc.status_code)
-    return await http_exception_handler(request, exc)
+# @app.exception_handler(StarletteHTTPException)
+# async def custom_http_exception_handler(request: Request, exc: StarletteHTTPException):
+#     if exc.status_code == 401:
+#         return templates.TemplateResponse("401.html", {"request": request}, status_code=exc.status_code)
+#     return await http_exception_handler(request, exc)
 
 @app.get('/')
 def check_bot():
