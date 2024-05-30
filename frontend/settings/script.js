@@ -36,7 +36,7 @@ export async function displaySettings() {
 
         const user_info = await get_user_info(token);
         if (user_info) {
-            document.getElementById("username").textContent = user_info.email;
+            document.getElementById("username").textContent = `Hello, ${user_info.email}`;
         }
 
         const response = await fetch(`${base_api_url}/admin/settings/all`, {
