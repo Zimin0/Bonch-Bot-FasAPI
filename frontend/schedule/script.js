@@ -6,6 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
     displayTimePeriods();
 });
 
+/**
+Подтягивает все существующие ПК.
+*/
 async function getPCs() {
     const token = await get_auth_token();
     if (!token) return [];
@@ -24,6 +27,9 @@ async function getPCs() {
     }
 }
 
+/**
+Подтягивает все временные промежутки существующих ПК.
+*/
 async function getPCTimePeriods(pcId) {
     const token = await get_auth_token();
     if (!token) return [];
@@ -42,6 +48,9 @@ async function getPCTimePeriods(pcId) {
     }
 }
 
+/**
+Выводит все временные промежутки в шаблон.
+*/
 async function displayTimePeriods() {
     // Выводит временные промежутки и ПК
     const pcs = await getPCs();

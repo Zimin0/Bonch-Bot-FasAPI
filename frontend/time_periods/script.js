@@ -5,10 +5,13 @@ document.getElementById('create-time-periods').addEventListener('click', async (
     await createTimePeriods();
 });
 
+/**
+    Создает блоки с временными промежутками.
+*/
 async function createTimePeriods() {
     const token = await get_auth_token();
     const messageContainer = document.getElementById('message-container');
-    messageContainer.innerHTML = ''; // Clear previous messages
+    messageContainer.innerHTML = ''; // Удаляем старые промежутки.
 
     if (!token) {
         showMessage('Error: No token found. Please login.', 'error');
@@ -84,6 +87,9 @@ async function createTimePeriods() {
     }
 }
 
+/** 
+Выводит сообщения об ошибках на страницу.
+*/
 function showMessage(message, type) {
     const messageContainer = document.getElementById('message-container');
     const messageDiv = document.createElement('div');
@@ -91,5 +97,6 @@ function showMessage(message, type) {
     messageDiv.textContent = message;
     messageContainer.appendChild(messageDiv);
 }
+
 
 window.update_user_info = update_user_info;

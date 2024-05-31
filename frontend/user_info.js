@@ -1,7 +1,9 @@
 import { base_api_url } from './base_api_url.js';
 
+/**
+Подтягивает токен авторизации из локального хранилища.
+*/
 export async function get_auth_token() {
-    // Подтягивает токен авторизации из локального хранилища.
     const token = window.localStorage.getItem('token');
     console.log(`token = ${token}`);
     if (token) {
