@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request, HTTPException, Depends
+from fastapi import APIRouter, status, HTTPException, Depends
 from sqlalchemy.orm import Session
 
 from db.session import get_db
@@ -10,7 +10,7 @@ from apis.v1.dependencies import get_current_active_superuser
 router = APIRouter()
 
 @router.get('/admin/settings/all', response_model=list[SettingGet])
-async def get_all_settings(request: Request, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
+async def get_all_settings(db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
     """ GET all settings. """
     all_settings = db.query(Setting).all() 
     return all_settings
@@ -23,7 +23,7 @@ async def get_setting_by_slug(setting_slug: str, db: Session = Depends(get_db), 
         raise HTTPException(status_code=404, detail="Setting not found")
     return db_setting
 
-@router.post("/admin/setting")
+@router.post("/admin/setting", status_code=status.HTTP_201_CREATED)
 async def create_setting(setting: SettingCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
     """ POST create setting. """
     db_setting = Setting(name=setting.name, slug=setting.slug, value=setting.value)
@@ -32,7 +32,7 @@ async def create_setting(setting: SettingCreate, db: Session = Depends(get_db), 
     db.refresh(db_setting)
     return db_setting
 
-@router.put("/admin/setting/{setting_id}")
+@router.put("/admin/setting/{setting_id}", status_code=status.HTTP_201_CREATED)
 async def update_setting(setting_id: int, setting: SettingUpdate, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
     """ UPDATE setting. """
     db_setting = db.query(Setting).filter(Setting.id == setting_id).first()

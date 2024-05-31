@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field, validator
 
-class CreatePC(BaseModel):
+class PCCreate(BaseModel):
     physical_number: int
     ready_to_use: bool
 
@@ -10,7 +10,7 @@ class CreatePC(BaseModel):
             raise ValueError("Physical number cannot be negative")
         return value
 
-class GetPC(BaseModel):
+class PCGet(BaseModel):
     id: int
     physical_number: int
     ready_to_use: bool

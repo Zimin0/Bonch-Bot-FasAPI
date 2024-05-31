@@ -16,15 +16,15 @@ from db.repository.user import create_new_user
 
 router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
-templates = Jinja2Templates(directory="templates")
+# templates = Jinja2Templates(directory="templates")
 
-@router.get('/login', response_class=HTMLResponse)
-async def show_login_page(request: Request, db: Session = Depends(get_db)):
-    return templates.TemplateResponse("auth/login.html", {'request': request})
+# @router.get('/login', response_class=HTMLResponse)
+# async def show_login_page(request: Request, db: Session = Depends(get_db)):
+#     return templates.TemplateResponse("auth/login.html", {'request': request})
 
-@router.get('/register', response_class=HTMLResponse)
-async def show_register_page(request: Request, db: Session = Depends(get_db)):
-    return templates.TemplateResponse('auth/register.html', {'request': request})
+# @router.get('/register', response_class=HTMLResponse)
+# async def show_register_page(request: Request, db: Session = Depends(get_db)):
+#     return templates.TemplateResponse('auth/register.html', {'request': request})
 
 @router.post('/register', status_code=status.HTTP_201_CREATED)
 async def register_user(user: UserCreate, db: Session = Depends(get_db)):

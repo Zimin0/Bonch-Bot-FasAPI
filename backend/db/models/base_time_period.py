@@ -1,3 +1,4 @@
+# db/models/base_time_period.py
 from sqlalchemy import Column, Integer, Time, ForeignKey
 from sqlalchemy.orm import declared_attr, relationship, declarative_mixin
 
@@ -17,8 +18,8 @@ class BaseTimePeriod:
 
     @declared_attr
     def computer_id(cls):
-        return Column(Integer, ForeignKey("computers.id"), nullable=False)
+        return Column(Integer, ForeignKey("pcs.id"), nullable=False)
 
     @declared_attr
     def computer(cls):
-        return relationship("Computer")
+        return relationship("PC")
