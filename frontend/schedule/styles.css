@@ -105,3 +105,37 @@ h1, h2 {
     text-align: center;
     margin-top: 20px;
 }
+
+.time-slot-green {
+    background-color: #62c46c;
+}
+
+.time-slot-red {
+    background-color: #cd3d3d;
+}
+
+.time-slot-yellow {
+    background-color: #dcd917;
+}
+
+.time-slot-black {
+    background-color: #000000;
+    color: white;
+}
+
+.time-slot-green:hover {
+    background-color: #3e8e41;
+}
+
+.time-slot-red:hover {
+    background-color: #9e3a3a;
+}
+
+.time-slot-yellow:hover {
+    background-color: #76751d;
+}
+
+.time-slot-black:hover {
+    background-color: #000000;
+}
+

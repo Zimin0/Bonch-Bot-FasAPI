@@ -57,30 +57,31 @@ async function getPCTimePeriods(pcId) {
     });
 
     if (response.ok) {
-        return response.json();
+        const timePeriods = await response.json();
+        // Добавляем статус к каждому временному промежутку
+        return timePeriods.map(t => ({
+            start: t.time_start,
+            end: t.time_end,
+            status: t.status
+        }));
     } else {
         console.error('Failed to fetch time periods for PC', pcId);
         return [];
     }
 }
 
+
 /**
 Выводит все временные промежутки в шаблон.
 */
 async function displayTimePeriods() {
-    // Выводит временные промежутки и ПК
     const pcs = await getPCs();
     for (let pc of pcs) {
         let timePeriods = await getPCTimePeriods(pc.id);
-        const timeSlots = timePeriods.map(t => {
-            return {
-                start: t.time_start,
-                end: t.time_end
-            };
-        });
-        createAndAppendBlock('pc-containers', pc.id, timeSlots);
+        createAndAppendBlock('pc-containers', pc.id, timePeriods);
     }
 }
+
 
 function createAndAppendBlock(containerId, pcNumber, timeSlots) {
     const container = document.getElementById(containerId);
@@ -97,8 +98,27 @@ function createAndAppendBlock(containerId, pcNumber, timeSlots) {
 
     timeSlots.forEach(slot => {
         const timeSlot = document.createElement('div');
-        timeSlot.className = 'time-slot time-slot-green'; // Adjust class based on your criteria
-        timeSlot.textContent = `${formatTime(slot.start)}`;
+        let statusClass = 'time-slot ';
+        switch (slot.status) {
+            case 'Свободно':
+                statusClass += 'time-slot-green';
+                break;
+            case 'Забронировано':
+                statusClass += 'time-slot-red';
+                break;
+            case 'Перерыв между бронями':
+                statusClass += 'time-slot-yellow';
+                break;
+            default:
+                statusClass += 'time-slot-black';
+                break;
+        }
+        timeSlot.className = statusClass;
+        if (slot.start) {
+            timeSlot.textContent = `${formatTime(slot.start)}`;
+        } else {
+            timeSlot.textContent = 'N/A';
+        }
         pcContainer.appendChild(timeSlot);
     });
 
@@ -106,8 +126,7 @@ function createAndAppendBlock(containerId, pcNumber, timeSlots) {
 }
 
 function formatTime(timeString) {
-    // Форматирует время до HH:MM
-    return timeString.slice(0, 5);
+    // Форматирует время до HH:MM, если timeString определено
+    return timeString ? timeString.slice(0, 5) : 'N/A';
 }
-
 window.update_user_info = update_user_info;
