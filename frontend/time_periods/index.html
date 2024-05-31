@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Time Periods</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script type="module" src="script.js" defer></script>
+    <script type="module" src="../base_api_url.js" defer></script>
+    <script type="module" src="../user_info.js" defer></script>
+</head>
+<body onload="update_user_info();">
+    <div class="menu">
+        <a href="/">Главная</a>
+        <a href="/frontend/settings">Админ панель</a>
+        <a href="/frontend/auth/login">Вход</a>
+        <a href="/frontend/auth/register">Регистрация</a>
+        <a href="/logout">Выйти</a>
+        <a href="/book">Бронирование</a>
+        <span id="username" style="float:right; color:white; padding: 14px 16px;"></span>
+    </div>
+
+    <h1>Create Time Periods</h1>
+    <button id="create-time-periods">Create Time Periods</button>
+</body>
+</html>

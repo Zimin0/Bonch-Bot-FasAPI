@@ -31,15 +31,17 @@ export async function get_user_info(token) {
 
 export async function update_user_info() {
     const token = await get_auth_token();
-    const user_info = await get_user_info(token);
+    if (!token) return;  // No token found, user is not logged in
 
-    const usernameElement = document.getElementById("username");
+    const user_info = await get_user_info(token);
     if (user_info) {
-        usernameElement.textContent = `Hello, ${user_info.email}`;
+        document.getElementById("username").textContent = `Hello, ${user_info.email}`;
     } else {
-        usernameElement.textContent = "I don't know who you are";
+        document.getElementById("username").textContent = 'Not logged in';
     }
 }
 
 // Добавим функцию в область видимости окна
 window.update_user_info = update_user_info;
+window.get_user_info = get_user_info;
+window.get_auth_token = get_auth_token;

@@ -1,0 +1,107 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.menu {
+    background-color: #808080; /* Серый цвет */
+    overflow: hidden;
+    padding: 10px 0;
+}
+
+.menu a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.menu a:hover {
+    background-color: #575757; /* Темно-серый при наведении */
+    transition: background-color 0.3s;
+}
+
+h1, h2 {
+    color: #404040; /* Темно-серый для заголовков */
+}
+
+.container {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+}
+
+.pc-block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 40px;
+    background-color: #f2f2f2;
+    color: #333;
+    font-weight: bold;
+    margin-right: 10px;
+    margin-bottom: 3px;
+    border-radius: 10px;
+    border: 2px solid #555;
+    align-self: stretch;
+}
+
+.time-slot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    margin: 3px;
+    width: 23px;
+    height: 10px;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.time-slot:not(:first-child) {
+    border: 2px solid #7c7979; 
+}
+
+.time-slot-green {
+    background-color: #62c46c;
+}
+
+.time-slot-black {
+    color: white;
+    background-color: #000000;
+    color: white;
+}
+
+.time-slot-red {
+    background-color: #cd3d3d;
+}
+
+.time-slot-yellow {
+    background-color: #dcd917;
+}
+
+.time-slot-green:hover {
+    background-color: #3e8e41;
+}
+
+.time-slot-red:hover {
+    background-color: #9e3a3a;
+}
+
+.time-slot-yellow:hover {
+    background-color: #76751d;
+}
+
+.time-slot-black:hover {
+    background-color: #000000;
+}
+
+.error {
+    color: red;
+    text-align: center;
+    margin-top: 20px;
+}
