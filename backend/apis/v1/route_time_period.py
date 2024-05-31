@@ -11,7 +11,7 @@ router = APIRouter()
 @router.get('/admin/time_periods/all', response_model=list[TimePeriodGet])
 async def get_all_time_periods(db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
     """ GET all time periods. """
-    all_time_periods = db.query(TimePeriod).all() 
+    all_time_periods = db.query(TimePeriod).all()
     return all_time_periods
 
 @router.get('/admin/pc/{computer_id}/time_periods', response_model=list[TimePeriodGet])
@@ -41,7 +41,8 @@ async def create_time_period(time_period: TimePeriodCreate, db: Session = Depend
     db_time_period = TimePeriod(
         time_start=time_period.time_start,
         time_end=time_period.time_end,
-        computer_id=time_period.computer_id
+        computer_id=time_period.computer_id,
+        status=time_period.status
     )
     db.add(db_time_period)
     db.commit()
@@ -57,6 +58,7 @@ async def update_time_period(time_period_id: int, time_period: TimePeriodUpdate,
     db_time_period.time_start = time_period.time_start
     db_time_period.time_end = time_period.time_end
     db_time_period.computer_id = time_period.computer_id
+    db_time_period.status = time_period.status
     db.commit()
     db.refresh(db_time_period)
     return db_time_period
