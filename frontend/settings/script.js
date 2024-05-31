@@ -1,6 +1,28 @@
 import { base_api_url } from '../base_api_url.js';
 import { get_auth_token, get_user_info, update_user_info } from '../user_info.js';
 
+import { checkAuthToken } from '../check_login.js';
+
+/////////////////
+checkAuthToken(); // Проверяем наличие токена перед загрузкой страницы
+/////////////////   
+
+////////////////// Обработка кнопки Выйти ////////////////// 
+document.addEventListener('DOMContentLoaded', () => {
+    update_user_info();
+    displayTimePeriods();
+
+    // Добавляем обработчик события для ссылки "Выйти"
+    const logoutLink = document.getElementById('logout_button');
+    if (logoutLink){
+        logoutLink.addEventListener('click', (event) =>{
+            event.preventDefault();
+            logout();
+        })
+    }
+});
+////////////////////////////////////////////////////////////
+
 export async function displaySettings() {
     try {
         const token = await get_auth_token();

@@ -9,7 +9,6 @@ export async function get_auth_token() {
     if (token) {
         return token;
     } else {
-        alert("Токен не найден. Вы не вошли в систему");
         return null;
     }
 }
@@ -45,7 +44,22 @@ export async function update_user_info() {
     }
 }
 
+/**
+Выход из аккаунта. Удаляет токен и редиректит на страницу входа
+ */
+export async function logout(){
+    const token = window.localStorage.getItem('token');
+    if (token){
+        localStorage.removeItem("token");
+        console.log("Токен удален.")
+        window.location.href = "/frontend/auth/login";
+    } else {
+        console.error("Не удалось найти токен и выйти из системы.");
+    }
+}
+
 // Добавим функцию в область видимости окна
 window.update_user_info = update_user_info;
 window.get_user_info = get_user_info;
 window.get_auth_token = get_auth_token;
+window.logout = logout;
