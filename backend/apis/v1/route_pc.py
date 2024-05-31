@@ -11,7 +11,7 @@ from apis.v1.dependencies import get_current_active_superuser
 router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
 
-@router.get('/pc', response_model=list[PCGet])
+@router.get('/pc/all', response_model=list[PCGet])
 async def get_all_pc(db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
     """ GET all PCs. """
     all_pcs = db.query(PC).all()

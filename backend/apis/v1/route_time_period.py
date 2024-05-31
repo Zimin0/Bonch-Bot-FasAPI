@@ -14,6 +14,12 @@ async def get_all_time_periods(db: Session = Depends(get_db), current_user: User
     all_time_periods = db.query(TimePeriod).all() 
     return all_time_periods
 
+@router.get('/admin/pc/{computer_id}/time_periods', response_model=list[TimePeriodGet])
+async def get_pc_time_periods(computer_id:int, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
+    """ GET time periods of one pc. """
+    all_time_periods = db.query(TimePeriod).filter(TimePeriod.computer_id == computer_id) 
+    return all_time_periods
+
 @router.get("/admin/time_period/{time_period_id}", response_model=TimePeriodGet)
 async def get_time_period_by_id(time_period_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
     """ GET time period by ID. """

@@ -3,9 +3,11 @@ import { base_api_url } from './base_api_url.js';
 export async function get_auth_token() {
     // Подтягивает токен авторизации из локального хранилища.
     const token = window.localStorage.getItem('token');
+    console.log(`token = ${token}`);
     if (token) {
         return token;
     } else {
+        alert("Токен не найден. Вы не вошли в систему");
         return null;
     }
 }

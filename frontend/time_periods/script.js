@@ -31,7 +31,7 @@ async function createTimePeriods() {
     const startUTC = new Date(start.getTime() - (start.getTimezoneOffset() * 60000));
     const endUTC = new Date(end.getTime() - (end.getTimezoneOffset() * 60000));
 
-    const pcs = await fetch(`${base_api_url}/pc`, {
+    const pcs = await fetch(`${base_api_url}/pc/all`, {
         headers: {
             'Authorization': `Bearer ${token}`
         }
