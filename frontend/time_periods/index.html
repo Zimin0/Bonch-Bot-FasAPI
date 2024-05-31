@@ -6,7 +6,6 @@
     <title>Create Time Periods</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
     <script type="module" src="script.js" defer></script>
-    <script type="module" src="../base_api_url.js" defer></script>
     <script type="module" src="../user_info.js" defer></script>
 </head>
 <body onload="update_user_info();">
@@ -21,6 +20,15 @@
     </div>
 
     <h1>Create Time Periods</h1>
+    
+    <label for="start-time">Start Time:</label>
+    <input type="time" id="start-time" name="start-time" value="10:00">
+    
+    <label for="end-time">End Time:</label>
+    <input type="time" id="end-time" name="end-time" value="21:00">
+
     <button id="create-time-periods">Create Time Periods</button>
+
+    <div id="message-container"></div>
 </body>
 </html>

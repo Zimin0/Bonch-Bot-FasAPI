@@ -15,10 +15,17 @@ async def get_all_time_periods(db: Session = Depends(get_db), current_user: User
     return all_time_periods
 
 @router.get('/admin/pc/{computer_id}/time_periods', response_model=list[TimePeriodGet])
-async def get_pc_time_periods(computer_id:int, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
+async def get_pc_time_periods(computer_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
     """ GET time periods of one pc. """
-    all_time_periods = db.query(TimePeriod).filter(TimePeriod.computer_id == computer_id) 
+    all_time_periods = db.query(TimePeriod).filter(TimePeriod.computer_id == computer_id).all()
     return all_time_periods
+
+@router.delete('/admin/pc/{computer_id}/time_periods', status_code=status.HTTP_204_NO_CONTENT)
+async def delete_pc_time_periods(computer_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
+    """ DELETE all time periods of one pc. """
+    db.query(TimePeriod).filter(TimePeriod.computer_id == computer_id).delete()
+    db.commit()
+    return {"detail": f"All time periods for PC {computer_id} were deleted."}
 
 @router.get("/admin/time_period/{time_period_id}", response_model=TimePeriodGet)
 async def get_time_period_by_id(time_period_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):

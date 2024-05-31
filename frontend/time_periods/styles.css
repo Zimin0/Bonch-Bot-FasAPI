@@ -100,8 +100,12 @@ h1, h2 {
     background-color: #000000;
 }
 
+.success {
+    color: green;
+    margin-top: 20px;
+}
+
 .error {
     color: red;
-    text-align: center;
     margin-top: 20px;
 }

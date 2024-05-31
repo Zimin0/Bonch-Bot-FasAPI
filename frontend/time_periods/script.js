@@ -7,15 +7,21 @@ document.getElementById('create-time-periods').addEventListener('click', async (
 
 async function createTimePeriods() {
     const token = await get_auth_token();
-    if (!token) return;  // Прекращаем выполнение, если токен не найден
+    const messageContainer = document.getElementById('message-container');
+    messageContainer.innerHTML = ''; // Clear previous messages
+
+    if (!token) {
+        showMessage('Error: No token found. Please login.', 'error');
+        return;
+    }
 
     const user_info = await get_user_info(token);
     if (user_info) {
         document.getElementById("username").textContent = `Hello, ${user_info.email}`;
     }
 
-    const startTime = "10:00";
-    const endTime = "21:00";
+    const startTime = document.getElementById("start-time").value;
+    const endTime = document.getElementById("end-time").value;
     const intervalMinutes = 15;
 
     const start = new Date();
@@ -31,37 +37,59 @@ async function createTimePeriods() {
     const startUTC = new Date(start.getTime() - (start.getTimezoneOffset() * 60000));
     const endUTC = new Date(end.getTime() - (end.getTimezoneOffset() * 60000));
 
-    const pcs = await fetch(`${base_api_url}/pc/all`, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    }).then(response => response.json());
+    try {
+        const pcs = await fetch(`${base_api_url}/pc/all`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }).then(response => response.json());
 
-    for (const pc of pcs) {
-        let currentTime = new Date(startUTC);
-        while (currentTime < endUTC) {
-            const timeStart = new Date(currentTime);
-            const timeEnd = new Date(currentTime);
-            timeEnd.setMinutes(timeEnd.getMinutes() + intervalMinutes);
-
-            const timePeriod = {
-                time_start: timeStart.toISOString().split('T')[1].slice(0, 8),
-                time_end: timeEnd.toISOString().split('T')[1].slice(0, 8),
-                computer_id: pc.id
-            };
-
-            await fetch(`${base_api_url}/admin/time_period`, {
-                method: 'POST',
+        for (const pc of pcs) {
+            // Delete old time periods for this PC
+            await fetch(`${base_api_url}/admin/pc/${pc.id}/time_periods`, {
+                method: 'DELETE',
                 headers: {
-                    'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(timePeriod)
+                }
             });
 
-            currentTime.setMinutes(currentTime.getMinutes() + intervalMinutes);
-        }
-    }
+            let currentTime = new Date(startUTC);
+            while (currentTime < endUTC) {
+                const timeStart = new Date(currentTime);
+                const timeEnd = new Date(currentTime);
+                timeEnd.setMinutes(timeEnd.getMinutes() + intervalMinutes);
 
-    alert('Time periods created successfully.');
+                const timePeriod = {
+                    time_start: timeStart.toISOString().split('T')[1].slice(0, 8),
+                    time_end: timeEnd.toISOString().split('T')[1].slice(0, 8),
+                    computer_id: pc.id
+                };
+
+                await fetch(`${base_api_url}/admin/time_period`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(timePeriod)
+                });
+
+                currentTime.setMinutes(currentTime.getMinutes() + intervalMinutes);
+            }
+        }
+
+        showMessage('Time periods created successfully.', 'success');
+    } catch (error) {
+        showMessage(`Error: ${error.message}`, 'error');
+    }
 }
+
+function showMessage(message, type) {
+    const messageContainer = document.getElementById('message-container');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = type;
+    messageDiv.textContent = message;
+    messageContainer.appendChild(messageDiv);
+}
+
+window.update_user_info = update_user_info;
