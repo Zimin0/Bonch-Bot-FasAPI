@@ -1,39 +1,22 @@
-import { base_api_url } from '../../base_api_url.js';
+import { User } from '../../api/user.js'
+import { processLogoutButton } from '../../common.js'
 
-////////////////// Обработка кнопки Выйти ////////////////// 
-document.addEventListener('DOMContentLoaded', () => {
-    update_user_info();
-    displayTimePeriods();
+processLogoutButton();
 
-    // Добавляем обработчик события для ссылки "Выйти"
-    const logoutLink = document.getElementById('logout_button');
-    if (logoutLink){
-        logoutLink.addEventListener('click', (event) =>{
-            event.preventDefault();
-            logout();
-        })
-    }
-});
-////////////////////////////////////////////////////////////
-
-export async function registerUser() {
+/**
+ * Получает данные (почта, telegram tag, пароль) из формы регистрации.
+ */
+function getUserData(){
     const email = document.getElementById("email").value;
     const tg_tag = document.getElementById("tg_tag").value;
     const password = document.getElementById("password").value;
-    const response = await fetch(`${base_api_url}/register`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, tg_tag, password }),
-    });
-
-    if (response.ok) {
-        alert("Регистрация успешна");
-        window.location.href = "/frontend/auth/login";
-    } else {
-        alert("Ошибка регистрации");
-    }
+    return { email, tg_tag, password };
 }
 
-window.registerUser = registerUser;
+function getDataAndRegister(){
+    const { email, tg_tag, password } = getUserData();
+    User.register(email, tg_tag, password);
+}
+
+// Инициализация функций для доступа из HTML
+window.getDataAndRegister = getDataAndRegister;

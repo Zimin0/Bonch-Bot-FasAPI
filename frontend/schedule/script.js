@@ -1,87 +1,81 @@
-import { base_api_url } from '../base_api_url.js';
-import { get_auth_token, logout, update_user_info } from '../user_info.js';
-import { checkAuthToken } from '../check_login.js';
+// import { base_api_url } from '../base_api_url.js';
+// import { get_auth_token, logout, update_user_info } from '../user_info.js';
+// import { checkAuthToken } from '../check_login.js';
 
-/////////////////
-checkAuthToken(); // Проверяем наличие токена перед загрузкой страницы
-/////////////////   
+import { User } from '../api/user.js'
+import { PC } from '../api/pc.js'
+import { processLogoutButton } from '../common.js'
 
-////////////////// Обработка кнопки Выйти ////////////////// 
-document.addEventListener('DOMContentLoaded', () => {
-    update_user_info();
-    displayTimePeriods();
+processLogoutButton();
 
-    // Добавляем обработчик события для ссылки "Выйти"
-    const logoutLink = document.getElementById('logout_button');
-    if (logoutLink){
-        logoutLink.addEventListener('click', (event) =>{
-            event.preventDefault();
-            logout();
-        })
-    }
-});
-////////////////////////////////////////////////////////////
+//////////////////////
+User.checkAuthToken(); // Проверяем наличие токена перед загрузкой страницы
+//////////////////////
 
-/**
-Подтягивает все существующие ПК.
-*/
-async function getPCs() {
-    const token = await get_auth_token();
-    if (!token) return [];
 
-    const response = await fetch(`${base_api_url}/pc/all`, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    });
+// async function getPCs() {
+//     const token = await get_auth_token();
+//     if (!token) return [];
 
-    if (response.ok) {
-        return response.json();
-    } else {
-        console.error('Failed to fetch PCs');
-        return [];
-    }
-}
+//     const response = await fetch(`${base_api_url}/pc/all`, {
+//         headers: {
+//             'Authorization': `Bearer ${token}`
+//         }
+//     });
+
+//     if (response.ok) {
+//         return response.json();
+//     } else {
+//         console.error('Failed to fetch PCs');
+//         return [];
+//     }
+// }
 
 /**
 Подтягивает все временные промежутки существующих ПК.
 */
-async function getPCTimePeriods(pcId) {
-    const token = await get_auth_token();
-    if (!token) return [];
+// async function getPCTimePeriods(pcId) {
+//     const token = await get_auth_token();
+//     if (!token) return [];
 
-    const response = await fetch(`${base_api_url}/admin/pc/${pcId}/time_periods`, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    });
+//     const response = await fetch(`${base_api_url}/admin/pc/${pcId}/time_periods`, {
+//         headers: {
+//             'Authorization': `Bearer ${token}`
+//         }
+//     });
 
-    if (response.ok) {
-        const timePeriods = await response.json();
-        // Добавляем статус к каждому временному промежутку
-        return timePeriods.map(t => ({
-            start: t.time_start,
-            end: t.time_end,
-            status: t.status
-        }));
-    } else {
-        console.error('Failed to fetch time periods for PC', pcId);
-        return [];
-    }
-}
+//     if (response.ok) {
+//         const timePeriods = await response.json();
+//         // Добавляем статус к каждому временному промежутку
+//         return timePeriods.map(t => ({
+//             start: t.time_start,
+//             end: t.time_end,
+//             status: t.status
+//         }));
+//     } else {
+//         console.error('Failed to fetch time periods for PC', pcId);
+//         return [];
+//     }
+// }
+
+
 
 
 /**
-Выводит все временные промежутки в шаблон.
-*/
+ * Выводит все временные промежутки в шаблон.
+ */
 async function displayTimePeriods() {
-    const pcs = await getPCs();
+    const token = await User.get_auth_token()
+    const pcs = await PC.getPCs(token);
     for (let pc of pcs) {
-        let timePeriods = await getPCTimePeriods(pc.id);
+        let timePeriods = await PC.getPCTimePeriods(pc.id, token);
         createAndAppendBlock('pc-containers', pc.id, timePeriods);
     }
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+    displayTimePeriods();
+});
 
 function createAndAppendBlock(containerId, pcNumber, timeSlots) {
     const container = document.getElementById(containerId);
@@ -125,8 +119,16 @@ function createAndAppendBlock(containerId, pcNumber, timeSlots) {
     container.appendChild(pcContainer);
 }
 
+/**
+ * Форматирует время до HH:MM, если timeString определено
+ */
 function formatTime(timeString) {
-    // Форматирует время до HH:MM, если timeString определено
     return timeString ? timeString.slice(0, 5) : 'N/A';
 }
-window.update_user_info = update_user_info;
+
+window.User = User;
+window.PC = PC;
+
+// window.User.update_user_info = User.update_user_info;
+// window.PC.getPCs = PC.getPCs; 
+// window.PC.getPCTimePeriods = PC.getPCTimePeriods;
