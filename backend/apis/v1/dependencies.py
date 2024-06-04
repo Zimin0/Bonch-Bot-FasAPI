@@ -20,7 +20,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         username: str = payload.get("sub")
-        print(f"{username=}")
+        # print(f"{username=}")
         if username is None:
             raise credentials_exception
     except JWTError:
@@ -30,7 +30,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
     if user is None:
         raise credentials_exception
     
-    print(f"User: {user.email}, is_active: {user.is_active}, is_superuser: {user.is_superuser}")
+    # print(f"User: {user.email}, is_active: {user.is_active}, is_superuser: {user.is_superuser}")
     
     return user
 
@@ -40,5 +40,5 @@ def get_current_active_superuser(current_user: User = Depends(get_current_user))
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Inactive user")
     if not current_user.is_superuser:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="The user doesn't have enough privileges")
-    print(f"User \"{current_user.email}\" is superuser.")
+    # print(f"User \"{current_user.email}\" is superuser.")
     return current_user

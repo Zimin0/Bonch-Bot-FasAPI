@@ -3,9 +3,9 @@ from datetime import time
 from enum import Enum
 
 class StatusEnum(str, Enum):
-    booked = "Забронировано"
-    free = "Свободно"
-    break_between_bookings = "Перерыв между бронями"
+    booked = "booked"
+    free = "free"
+    break_between_bookings = "break_between_bookings"
 
 class TimePeriodBase(BaseModel):
     time_start: time
