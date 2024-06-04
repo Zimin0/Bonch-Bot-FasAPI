@@ -1,26 +1,22 @@
-import { base_api_url } from '../base_api_url.js';
-import { get_auth_token, get_user_info, update_user_info, logout  } from '../user_info.js';
-import { checkAuthToken } from '../check_login.js';
+import { User } from '../api/user.js'
+import { PC } from '../api/pc.js'
+import { Setting } from '../api/setting.js'
+import { processLogoutButton, showMessage } from '../common.js'
+import { base_api_url } from '../variables.js';
 
-/////////////////
-checkAuthToken(); // Проверяем наличие токена перед загрузкой страницы
-/////////////////   
+await User.pageOnlyForAdmin();
 
-////////////////// Обработка кнопки Выйти ////////////////// 
-document.addEventListener('DOMContentLoaded', () => {
-    update_user_info();
-    displayTimePeriods();
+processLogoutButton();
 
-    // Добавляем обработчик события для ссылки "Выйти"
-    const logoutLink = document.getElementById('logout_button');
-    if (logoutLink){
-        logoutLink.addEventListener('click', (event) =>{
-            event.preventDefault();
-            logout();
-        })
-    }
-});
-////////////////////////////////////////////////////////////
+//////////////////////
+User.checkAuthToken(); // Проверяем наличие токена перед загрузкой страницы
+////////////////////// 
+
+const StatusEnum = {
+    'booked': 'booked',
+    'free': 'free',
+    'break_between_bookings': 'break_between_bookings',
+};
 
 document.getElementById('create-time-periods').addEventListener('click', async () => {
     await createTimePeriods();
@@ -30,7 +26,8 @@ document.getElementById('create-time-periods').addEventListener('click', async (
     Создает блоки с временными промежутками.
 */
 async function createTimePeriods() {
-    const token = await get_auth_token();
+    const token = await User.get_auth_token();
+    if (!token) return;
     const messageContainer = document.getElementById('message-container');
     messageContainer.innerHTML = ''; // Удаляем старые промежутки.
 
@@ -39,7 +36,7 @@ async function createTimePeriods() {
         return;
     }
 
-    const user_info = await get_user_info(token);
+    const user_info = await User.get_user_info(token);
     if (user_info) {
         document.getElementById("username").textContent = `Hello, ${user_info.email}`;
     }
@@ -84,12 +81,13 @@ async function createTimePeriods() {
                 timeEnd.setMinutes(timeEnd.getMinutes() + intervalMinutes);
 
                 const timePeriod = {
+                    status: StatusEnum['Свободно'], // Use the correct enum value
                     time_start: timeStart.toISOString().split('T')[1].slice(0, 8),
                     time_end: timeEnd.toISOString().split('T')[1].slice(0, 8),
                     computer_id: pc.id
                 };
 
-                await fetch(`${base_api_url}/admin/time_period`, {
+                const response = await fetch(`${base_api_url}/admin/time_period`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -97,6 +95,11 @@ async function createTimePeriods() {
                     },
                     body: JSON.stringify(timePeriod)
                 });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Failed to create time period: ${response.status} - ${response.statusText} - ${errorText}`);
+                }
 
                 currentTime.setMinutes(currentTime.getMinutes() + intervalMinutes);
             }
@@ -108,16 +111,7 @@ async function createTimePeriods() {
     }
 }
 
-/** 
-Выводит сообщения об ошибках на страницу.
-*/
-function showMessage(message, type) {
-    const messageContainer = document.getElementById('message-container');
-    const messageDiv = document.createElement('div');
-    messageDiv.className = type;
-    messageDiv.textContent = message;
-    messageContainer.appendChild(messageDiv);
-}
-
-
-window.update_user_info = update_user_info;
+window.User = User;
+window.PC = PC;
+window.Setting = Setting;
+window.User.get_auth_token = User.get_auth_token;

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Настройки Администратора</title>
+    <title>Панель администратора</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
-    <script type="module" src="script.js" defer></script>
-    <script type="module" src="../user_info.js" defer></script>
+    <script type="module" src="./script.js"></script>
 </head>
-<body onload="displaySettings()">
+<body onload="getTokenAndDisplaySettings(); User.update_user_info();">
+
     <div class="menu">
         <a href="/">Главная</a>
         <a href="/frontend/settings">Админ панель</a>
@@ -17,10 +17,16 @@
         <span id="username" style="float:right; color:white; padding: 14px 16px;"></span>
     </div>
 
-    <h1>Настройки Администратора</h1>
+    <h1>Панель администратора</h1>
+
+    <div class="submenu">
+        <a href="/frontend/schedule/">Бронирование</a>
+        <a href="/frontend/time_periods/">Создание временных промежутков</a>
+        <a href="">Управление пользователями</a>
+    </div>
 
     <h2>Добавить новую настройку</h2>
-    <form onsubmit="event.preventDefault(); addSetting();">
+    <form onsubmit="event.preventDefault(); getTokenAndAddSetting();">
         <label for="new-name">Имя:</label>
         <input type="text" id="new-name" required>
         <label for="new-slug">Слаг:</label>
@@ -29,7 +35,7 @@
         <input type="text" id="new-value" required>
         <button type="submit">Добавить</button>
     </form>
-
+    <div id="message-container"></div>
     <h2>Существующие настройки</h2>
     <table id="settings-table">
         <thead>
@@ -44,5 +50,9 @@
             <!-- Настройки будут добавлены сюда динамически -->
         </tbody>
     </table>
+    <!-- <script>
+        Window.onload = getTokenAndDisplaySettings();
+    </script> -->
+    <!-- <script>getTokenAndDisplaySettings()</script> -->
 </body>
 </html>

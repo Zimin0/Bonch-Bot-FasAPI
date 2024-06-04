@@ -8,64 +8,20 @@ import { processLogoutButton } from '../common.js'
 
 processLogoutButton();
 
+if (!User.isAdmin()){
+    displayNotAdminMessage();
+}
+
 //////////////////////
 User.checkAuthToken(); // Проверяем наличие токена перед загрузкой страницы
 //////////////////////
-
-
-// async function getPCs() {
-//     const token = await get_auth_token();
-//     if (!token) return [];
-
-//     const response = await fetch(`${base_api_url}/pc/all`, {
-//         headers: {
-//             'Authorization': `Bearer ${token}`
-//         }
-//     });
-
-//     if (response.ok) {
-//         return response.json();
-//     } else {
-//         console.error('Failed to fetch PCs');
-//         return [];
-//     }
-// }
-
-/**
-Подтягивает все временные промежутки существующих ПК.
-*/
-// async function getPCTimePeriods(pcId) {
-//     const token = await get_auth_token();
-//     if (!token) return [];
-
-//     const response = await fetch(`${base_api_url}/admin/pc/${pcId}/time_periods`, {
-//         headers: {
-//             'Authorization': `Bearer ${token}`
-//         }
-//     });
-
-//     if (response.ok) {
-//         const timePeriods = await response.json();
-//         // Добавляем статус к каждому временному промежутку
-//         return timePeriods.map(t => ({
-//             start: t.time_start,
-//             end: t.time_end,
-//             status: t.status
-//         }));
-//     } else {
-//         console.error('Failed to fetch time periods for PC', pcId);
-//         return [];
-//     }
-// }
-
-
-
 
 /**
  * Выводит все временные промежутки в шаблон.
  */
 async function displayTimePeriods() {
     const token = await User.get_auth_token()
+    if (!token) return;
     const pcs = await PC.getPCs(token);
     for (let pc of pcs) {
         let timePeriods = await PC.getPCTimePeriods(pc.id, token);
@@ -94,13 +50,13 @@ function createAndAppendBlock(containerId, pcNumber, timeSlots) {
         const timeSlot = document.createElement('div');
         let statusClass = 'time-slot ';
         switch (slot.status) {
-            case 'Свободно':
+            case 'free':
                 statusClass += 'time-slot-green';
                 break;
-            case 'Забронировано':
+            case 'booked':
                 statusClass += 'time-slot-red';
                 break;
-            case 'Перерыв между бронями':
+            case 'break_between_bookings':
                 statusClass += 'time-slot-yellow';
                 break;
             default:
@@ -128,7 +84,3 @@ function formatTime(timeString) {
 
 window.User = User;
 window.PC = PC;
-
-// window.User.update_user_info = User.update_user_info;
-// window.PC.getPCs = PC.getPCs; 
-// window.PC.getPCTimePeriods = PC.getPCTimePeriods;

@@ -19,18 +19,23 @@ export class User {
     static async get_user_info(token) {
         if (!token) return null;
 
-        const response = await fetch(`${base_api_url}/user/me`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            }
-        });
+        try {
+            const response = await fetch(`${base_api_url}/user/me`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
 
-        if (response.ok) {
-            return await response.json();
-        } else {
-            console.error("Ошибка при получении информации о пользователе", response.status);
+            if (response.ok) {
+                return await response.json();
+            } else {
+                console.error("Ошибка при получении информации о пользователе", response.status);
+                return null;
+            }
+        } catch (error) {
+            console.error("Ошибка при выполнении запроса", error);
             return null;
         }
     }
@@ -73,6 +78,34 @@ export class User {
             window.location.href = '/frontend/auth/login';
         }
     }
+
+    static async isAdmin(token) {
+        try {
+            const userInfo = await User.get_user_info(token);
+            if (userInfo) {
+                return userInfo.is_superuser;
+            } else {
+                console.error('User info is null');
+                return false;
+            }
+        } catch (error) {
+            console.error(`Error checking admin status: ${error.message}`);
+            return false;
+        }
+    }
+
+    static async pageOnlyForAdmin() {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+        const is_admin = await User.isAdmin(token);
+        if (!is_admin){
+            alert("Вы не администратор. 403 ошибка.");
+            window.location.href = "/frontend/auth/login/"
+        }
+    }
+
+    
+
     /**
      * Вход в систему -> получение токена.
      */
@@ -96,7 +129,6 @@ export class User {
             const data = await response.json();
             alert("Вход выполнен успешно");
             window.localStorage.setItem('token', data.access_token);
-            window.location.href = "/";
         } else {
             alert("Ошибка входа");
         }

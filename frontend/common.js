@@ -21,7 +21,19 @@ export function processLogoutButton(){
     });
 }
 
+/** 
+Выводит сообщения об ошибках на страницу.
+*/
+export function showMessage(message, type) {
+    const messageContainer = document.getElementById('message-container');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = type;
+    messageDiv.textContent = message;
+    messageContainer.appendChild(messageDiv);
+}
 
-
+/** 
+Проверяет, что пользователь является админом. В ином случае - сообщение 403 и редирект.
+*/
 
 

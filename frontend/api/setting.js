@@ -1,14 +1,8 @@
-class SettingAPI {
-    static async displaySettings() {
+import { base_api_url } from '../variables.js';
+
+export class Setting {
+    static async displaySettings(token) {
         try {
-            const token = await get_auth_token();
-            if (!token) return;  // Прекращаем выполнение, если токен не найден
-
-            const user_info = await get_user_info(token);
-            if (user_info) {
-                document.getElementById("username").textContent = `Hello, ${user_info.email}`;
-            }
-
             const response = await fetch(`${base_api_url}/admin/settings/all`, {
                 method: "GET",
                 headers: {
@@ -24,15 +18,15 @@ class SettingAPI {
                 settings.forEach(setting => {
                     const row = document.createElement("tr");
                     row.innerHTML = `
-                        <td><input type="text" id="name-${setting.id}" value="${setting.name}"></td>
-                        <td><input type="text" id="slug-${setting.id}" value="${setting.slug}"></td>
-                        <td><input type="text" id="value-${setting.id}" value="${setting.value}"></td>
-                        <td>
-                            <button onclick="Setting_api.updateSetting(${setting.id})">Обновить</button>
-                            <button onclick="Setting_api.deleteSetting(${setting.id})">Удалить</button>
-                        </td>
-                    `;
-                    tableBody.appendChild(row);
+                    <td><input type="text" id="name-${setting.id}" value="${setting.name}"></td>
+                    <td><input type="text" id="slug-${setting.id}" value="${setting.slug}"></td>
+                    <td><input type="text" id="value-${setting.id}" value="${setting.value}"></td>
+                    <td>
+                        <button onclick="Setting.updateSetting(${setting.id}, '${token}')">Обновить</button>
+                        <button onclick="Setting.deleteSetting(${setting.id}, '${token}')">Удалить</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
                 });
             } else {
                 console.error("Ошибка при получении настроек", response.status);
@@ -44,9 +38,9 @@ class SettingAPI {
         }
     }
 
-    static async addSetting() {
-        const token = await get_auth_token();
-        if (!token) return;
+    static async addSetting(token) {
+        // const token = await get_auth_token();
+        // if (!token) return;
 
         const name = document.getElementById("new-name").value;
         const slug = document.getElementById("new-slug").value;
@@ -68,9 +62,9 @@ class SettingAPI {
         }
     }
 
-    static async updateSetting(id) {
-        const token = await get_auth_token();
-        if (!token) return;
+    static async updateSetting(id, token) {
+        // const token = await get_auth_token();
+        // if (!token) return;
 
         const name = document.getElementById(`name-${id}`).value;
         const slug = document.getElementById(`slug-${id}`).value;
@@ -92,9 +86,9 @@ class SettingAPI {
         }
     }
 
-    static async deleteSetting(id) {
-        const token = await get_auth_token();
-        if (!token) return;
+    static async deleteSetting(id, token) {
+        // const token = await get_auth_token();
+        // if (!token) return;
 
         const response = await fetch(`${base_api_url}/admin/setting/${id}`, {
             method: 'DELETE',

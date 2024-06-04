@@ -13,9 +13,9 @@ function getUserData(){
     return { email, tg_tag, password };
 }
 
-function getDataAndRegister(){
+async function getDataAndRegister(){
     const { email, tg_tag, password } = getUserData();
-    User.register(email, tg_tag, password);
+    await User.register(email, tg_tag, password);
 }
 
 // Инициализация функций для доступа из HTML
