@@ -12,7 +12,7 @@ router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
 
 @router.get('/pc/all', response_model=list[PCGet])
-async def get_all_pc(db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
+async def get_all_pc(db: Session = Depends(get_db)):
     """ GET all PCs. """
     all_pcs = db.query(PC).all()
     return all_pcs

@@ -15,7 +15,7 @@ async def get_all_time_periods(db: Session = Depends(get_db), current_user: User
     return all_time_periods
 
 @router.get('/admin/pc/{computer_id}/time_periods', response_model=list[TimePeriodGet])
-async def get_pc_time_periods(computer_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
+async def get_pc_time_periods(computer_id: int, db: Session = Depends(get_db)):
     """ GET time periods of one pc. """
     all_time_periods = db.query(TimePeriod).filter(TimePeriod.computer_id == computer_id).all()
     return all_time_periods
