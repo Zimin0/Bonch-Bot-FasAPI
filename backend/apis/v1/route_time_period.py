@@ -4,12 +4,12 @@ from db.session import get_db
 from db.models.time_period import TimePeriod
 from schemas.time_period import TimePeriodCreate, TimePeriodUpdate, TimePeriodGet
 from db.models.user import User
-from apis.v1.dependencies import get_current_active_superuser
+from apis.v1.dependencies import get_current_active_superuser, get_current_active_user
 
 router = APIRouter()
 
 @router.get('/admin/time_periods/all', response_model=list[TimePeriodGet])
-async def get_all_time_periods(db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
+async def get_all_time_periods(db: Session = Depends(get_db)):
     """ GET all time periods. """
     all_time_periods = db.query(TimePeriod).all()
     return all_time_periods
@@ -28,7 +28,7 @@ async def delete_pc_time_periods(computer_id: int, db: Session = Depends(get_db)
     return {"detail": f"All time periods for PC {computer_id} were deleted."}
 
 @router.get("/admin/time_period/{time_period_id}", response_model=TimePeriodGet)
-async def get_time_period_by_id(time_period_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
+async def get_time_period_by_id(time_period_id: int, db: Session = Depends(get_db)):
     """ GET time period by ID. """
     db_time_period = db.query(TimePeriod).filter(TimePeriod.id == time_period_id).first()
     if db_time_period is None:

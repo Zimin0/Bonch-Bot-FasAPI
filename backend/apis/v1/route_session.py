@@ -60,22 +60,6 @@ async def create_session(pc_session: SessionCreate, db: Session = Depends(get_db
     db.refresh(db_pc_session)
     return db_pc_session
 
-# @router.put('/session/{session_id}', response_model=SessionGet)
-# async def update_session(session_id: int, session: SessionUpdate, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
-#     """ UPDATE session. """
-#     db_session = db.query(PC_Session).filter(PC_Session.id == session_id).first()
-#     if db_session is None:
-#         raise HTTPException(status_code=404, detail="Session not found")
-
-#     db_session.time_start = session.time_start
-#     db_session.time_end = session.time_end
-#     db_session.computer_id = session.computer_id
-#     db_session.tg_tag = session.tg_tag
-
-#     db.commit()
-#     db.refresh(db_session)
-#     return db_session
-
 @router.delete('/session/{session_id}')
 async def delete_session(session_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
     """ DELETE session. """

@@ -6,7 +6,7 @@ from db.session import get_db
 from db.models.user import User
 from schemas.pc import PCGet, PCCreate, PCUpdate
 from db.models.pc import PC
-from apis.v1.dependencies import get_current_active_superuser
+from apis.v1.dependencies import get_current_active_superuser, get_current_active_user
 
 router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
@@ -27,7 +27,7 @@ async def create_pc(pc: PCCreate, db: Session = Depends(get_db), current_user: U
     return db_pc
 
 @router.get('/pc/{pc_id}', response_model=PCGet)
-async def get_pc_by_id(pc_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
+async def get_pc_by_id(pc_id: int, db: Session = Depends(get_db)):
     """ GET PC by ID. """
     db_pc = db.query(PC).filter(PC.id == pc_id).first()
     if db_pc is None:

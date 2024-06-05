@@ -11,7 +11,7 @@ from apis.v1.dependencies import get_current_active_superuser
 router = APIRouter()
 
 @router.post('/user', response_model=ShowUser, status_code=status.HTTP_201_CREATED)
-def create_user(user: UserCreate, db: Session = Depends(get_db)):
+def create_user(user: UserCreate, db: Session = Depends(get_db),  current_user: User = Depends(get_current_active_superuser),):
     user = create_new_user(user=user, db=db)
     return user
 

@@ -5,7 +5,7 @@ from db.session import get_db
 from db.models.setting import Setting
 from schemas.setting import SettingCreate, SettingUpdate, SettingGet
 from db.models.user import User
-from apis.v1.dependencies import get_current_active_superuser
+from apis.v1.dependencies import get_current_active_superuser, get_current_active_user
 
 router = APIRouter()
 
