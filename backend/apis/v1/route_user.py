@@ -1,12 +1,13 @@
-from fastapi import APIRouter, status
+from fastapi import APIRouter, status, Depends, HTTPException
 from sqlalchemy.orm import Session
-from fastapi import Depends
 
 from schemas.user import UserCreate, ShowUser
 from db.session import get_db
 from db.models.user import User
 from db.repository.user import create_new_user
-from apis.v1.dependencies import get_current_active_superuser
+from apis.v1.dependencies import get_current_active_superuser, get_current_user
+from db.repository.user import create_new_user, get_user, delete_user
+from core.hashing import Hasher
 
 router = APIRouter()
 
@@ -15,8 +16,31 @@ def create_user(user: UserCreate, db: Session = Depends(get_db),  current_user: 
     user = create_new_user(user=user, db=db)
     return user
 
+@router.put('/user', response_model=ShowUser, status_code=status.HTTP_201_CREATED)
+def update_user(user_request: UserCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    user_in_db = get_user(db=db, email=user_request.email)
+    if not user_in_db:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    user_in_db.email = user_request.email
+    user_in_db.tg_tag = user_request.tg_tag
+    user_in_db.password = Hasher.get_password_hash(user_request.password)
+    db.commit()
+    db.refresh(user_in_db)
+
+    return user_in_db
+
+@router.delete('/user', status_code=status.HTTP_204_NO_CONTENT)
+async def delete_user_account(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    user = get_user(email=current_user.email, db=db)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    delete_user(user, db)
+    return {"detail": "User deleted."}
+
 @router.get('/user/me', response_model=ShowUser)
-async def get_my_info(db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
+async def get_my_info(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     """Возвращает информацию о себе. """
     response_obj = ShowUser.model_validate(current_user)
     # user_me = db.query(User).filter(User.id == user_id).first()

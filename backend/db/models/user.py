@@ -10,3 +10,5 @@ class User(Base):
     password = Column(String, nullable=False)
     is_superuser = Column(Boolean(), default=False)
     is_active = Column(Boolean(), default=True)
+    
+    pc_sessions = relationship("PC_Session", back_populates="user")

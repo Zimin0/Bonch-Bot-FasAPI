@@ -6,6 +6,6 @@ from db.base_class import Base
 class PC_Session(BaseTimePeriod, Base):
     """ Игровые сессии за ПК. """
     __tablename__ = "pc_sessions"
-    tg_tag = Column(String, ForeignKey("users.tg_tag"), nullable=False)
+    tg_tag = Column(String, ForeignKey("users.tg_tag", onupdate='CASCADE', ondelete='CASCADE'), nullable=False)
 
-    user = relationship("User")
+    user = relationship("User", back_populates="pc_sessions")

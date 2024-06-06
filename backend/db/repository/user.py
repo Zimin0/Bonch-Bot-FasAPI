@@ -23,3 +23,8 @@ def create_new_user(user: UserCreate, db: Session):
 def get_user(email:str, db:Session):
     user = db.query(User).filter(User.email == email).first()
     return user
+
+def delete_user(email:str, db:Session):
+    user_in_db = db.query(User).filter(User.email == email).first()
+    db.delete(user_in_db)
+    db.commit()
