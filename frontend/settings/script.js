@@ -29,6 +29,17 @@ async function getTokenAndAddSetting() {
     Setting.addSetting(token);
 }
 
+async function getSetting() {
+    const token = await User.get_auth_token();
+    if (!token) return;
+
+}
+
+// async function isAdmin(func){
+//     const token = await User.get_auth_token();
+//     if (!token) return
+// }
+
 // Ensure functions are accessible in the global scope
 window.User = User;
 window.PC = PC;

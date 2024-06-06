@@ -39,9 +39,6 @@ export class Setting {
     }
 
     static async addSetting(token) {
-        // const token = await get_auth_token();
-        // if (!token) return;
-
         const name = document.getElementById("new-name").value;
         const slug = document.getElementById("new-slug").value;
         const value = document.getElementById("new-value").value;
@@ -63,9 +60,6 @@ export class Setting {
     }
 
     static async updateSetting(id, token) {
-        // const token = await get_auth_token();
-        // if (!token) return;
-
         const name = document.getElementById(`name-${id}`).value;
         const slug = document.getElementById(`slug-${id}`).value;
         const value = document.getElementById(`value-${id}`).value;
@@ -87,9 +81,6 @@ export class Setting {
     }
 
     static async deleteSetting(id, token) {
-        // const token = await get_auth_token();
-        // if (!token) return;
-
         const response = await fetch(`${base_api_url}/admin/setting/${id}`, {
             method: 'DELETE',
             headers: {
@@ -102,5 +93,23 @@ export class Setting {
         } else {
             alert("Ошибка удаления настройки");
         }
+    }
+
+    /**
+     * Получает настройку по слагу.
+     */
+    static async getSettingBySlug(slug, token){
+        const response = await fetch(`${base_api_url}/admin/setting/slug/${slug}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (response.ok) {
+            const setting = await response.json();
+            return setting;
+        }
+        return null;
     }
 }

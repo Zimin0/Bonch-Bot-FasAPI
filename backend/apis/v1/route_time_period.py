@@ -17,7 +17,7 @@ async def get_all_time_periods(db: Session = Depends(get_db)):
 @router.get('/admin/pc/{computer_id}/time_periods', response_model=list[TimePeriodGet])
 async def get_pc_time_periods(computer_id: int, db: Session = Depends(get_db)):
     """ GET time periods of one pc. """
-    all_time_periods = db.query(TimePeriod).filter(TimePeriod.computer_id == computer_id).all()
+    all_time_periods = db.query(TimePeriod).filter(TimePeriod.computer_id == computer_id).order_by(TimePeriod.time_start)
     return all_time_periods
 
 @router.delete('/admin/pc/{computer_id}/time_periods', status_code=status.HTTP_204_NO_CONTENT)

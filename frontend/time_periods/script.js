@@ -12,6 +12,11 @@ processLogoutButton();
 User.checkAuthToken(); // Проверяем наличие токена перед загрузкой страницы
 ////////////////////// 
 
+const token = await User.get_auth_token();
+var slug = 'TIME_PERIOD_LENGTH';
+const setting = await Setting.getSettingBySlug(slug, token);
+showMessage(`${slug} = ${parseInt(setting.value)/60} минут`, 'success');
+
 const StatusEnum = {
     'booked': 'booked',
     'free': 'free',
