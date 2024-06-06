@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Личный кабинет</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script type="module" src="script.js" defer></script>
+</head>
+<body onload="User.update_user_info();">
+    <div class="menu">
+        <a href="/">Главная</a>
+        <a href="/frontend/settings">Админ панель</a>
+        <a href="/frontend/auth/login">Вход</a>
+        <a href="/frontend/auth/register">Регистрация</a>
+        <a id="logout_button" onclick="User.logout()">Выйти</a>
+        <a href="/frontend/schedule/">Бронирование</a>
+        <span id="username" style="float:right; color:white; padding: 14px 16px;"></span>
+    </div>
+
+    <h1>Личный кабинет</h1>
+    <form class="user-form" onsubmit="event.preventDefault(); User.updateUserDetails();">
+        <label for="email">Электронная почта:</label>
+        <input type="email" id="email" required>
+        
+        <label for="tg_tag">Telegram Tag:</label>
+        <input type="text" id="tg_tag" required>
+        
+        <label for="password">Пароль:</label>
+        <input type="password" id="password" required>
+        
+        <button type="submit">Обновить информацию</button>
+    </form>
+    <button class="delete-button" onclick="User.deleteUserAccount()">Удалить аккаунт</button>
+    <div id="message-container"></div>
+</body>
+</html>

@@ -1,0 +1,90 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.menu {
+    background-color: #808080; /* Серый цвет */
+    overflow: hidden;
+    padding: 10px 0;
+}
+
+.menu a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.menu a:hover {
+    background-color: #575757; /* Темно-серый при наведении */
+    transition: background-color 0.3s;
+}
+
+h1, h2 {
+    color: #404040; /* Темно-серый для заголовков */
+    text-align: center;
+}
+
+.user-form {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+}
+
+.user-form label {
+    display: block;
+    margin-bottom: 8px;
+    color: #404040;
+}
+
+.user-form input[type="text"], 
+.user-form input[type="email"], 
+.user-form input[type="password"] {
+    width: calc(100%); /* Adjust width to leave space for padding */
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.user-form button {
+    padding: 10px 15px;
+    color: white;
+    background-color: #808080; /* Серый цвет для кнопок */
+    border: none;
+    cursor: pointer;
+    width: calc(100%); /* Adjust width to leave space for padding */
+    margin: 10px auto 0;
+}
+
+.user-form button:hover {
+    background-color: #575757; /* Темно-серый при наведении */
+    transition: background-color 0.3s;
+}
+
+.delete-button {
+    display: block;
+    padding: 10px 15px;
+    color: white;
+    background-color: #ff4d4d; /* Красный цвет для кнопки удаления */
+    border: none;
+    cursor: pointer;
+    width: 250px; /* Fixed width */
+    margin: 20px auto;
+    text-align: center;
+}
+
+.delete-button:hover {
+    background-color: #cc0000; /* Темно-красный при наведении */
+    transition: background-color 0.3s;
+}
+
+#error {
+    color: red;
+    text-align: center;
+    margin-top: 20px;
+}
