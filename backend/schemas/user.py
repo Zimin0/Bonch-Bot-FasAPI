@@ -11,6 +11,7 @@ class ShowUser(BaseModel):
     email: EmailStr
     tg_tag: Optional[str]
     is_active: bool
+    avatar: Optional[str]
     is_superuser: bool
 
     class Config(): # tells pydantic to convert even non dict obj to json

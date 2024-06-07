@@ -4,14 +4,14 @@ from fastapi import FastAPI, Request, APIRouter, Depends
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi.templating import Jinja2Templates
 from fastapi.exception_handlers import http_exception_handler
-from core.config import settings
+from core.config import project_settings
 from db.session import engine
 from fastapi.middleware.cors import CORSMiddleware
 from db.base import Base    
 
 from apis.base import api_router
 
-templates = Jinja2Templates(directory="templates/errors")
+# templates = Jinja2Templates(directory="templates/errors")
 
 def create_tables():
     Base.metadata.create_all(bind=engine)
@@ -20,7 +20,7 @@ def include_router(app):
 	app.include_router(api_router)
 
 def start_application():
-    app = FastAPI(title=settings.PROJECT_NAME, version=settings.PROJECT_VERSION)
+    app = FastAPI(title=project_settings.PROJECT_NAME, version=project_settings.PROJECT_VERSION)
     create_tables()
     include_router(app)
     return app

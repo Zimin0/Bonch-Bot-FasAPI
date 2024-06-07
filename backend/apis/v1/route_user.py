@@ -1,5 +1,10 @@
 from fastapi import APIRouter, status, Depends, HTTPException
 from sqlalchemy.orm import Session
+from fastapi import File, UploadFile
+from core.config import project_settings
+import os
+import aiofiles
+from fastapi.responses import FileResponse
 
 from schemas.user import UserCreate, ShowUser
 from db.session import get_db
@@ -45,4 +50,43 @@ async def get_my_info(db: Session = Depends(get_db), current_user: User = Depend
     response_obj = ShowUser.model_validate(current_user)
     # user_me = db.query(User).filter(User.id == user_id).first()
     return response_obj
+
+@router.post("/user/avatar")
+async def upload_my_avatar(file: UploadFile = File(...), db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    try:
+        contents = await file.file.read()
+        upload_path = project_settings.UPLOAD_PATH
         
+        if not os.path.exists(upload_path):
+            os.makedirs(upload_path)
+
+        file_extension = os.path.splitext(file.filename)[1]
+        avatar_filename = f"{current_user.id}_avatar{file_extension}"
+        file_path = os.path.join(upload_path, avatar_filename)
+
+        print(file_path)
+        with aiofiles.open(file_path, 'wb') as f:
+            await f.write(contents)
+        
+        current_user.avatar = avatar_filename
+        db.commit()
+        db.refresh(current_user)
+    except Exception as e:
+        return {"message": f"There was an error uploading your avatar: {e}"}
+    finally:
+        file.file.close()
+
+    return {"message": f"Successfully uploaded new avatar {avatar_filename}"}
+
+
+@router.get('/user/avatar', response_class=FileResponse)
+async def get_my_avatar(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    if not current_user.avatar:
+        raise HTTPException(status_code=404, detail="Avatar not found")
+    
+    file_path = os.path.join(project_settings.UPLOAD_PATH, current_user.avatar)
+
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="Avatar not found")
+    
+    return FileResponse(file_path)
