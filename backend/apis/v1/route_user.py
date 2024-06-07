@@ -54,7 +54,7 @@ async def get_my_info(db: Session = Depends(get_db), current_user: User = Depend
 @router.post("/user/avatar")
 async def upload_my_avatar(file: UploadFile = File(...), db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     try:
-        contents = await file.file.read()
+        contents = await file.read()
         upload_path = project_settings.UPLOAD_PATH
         
         if not os.path.exists(upload_path):
@@ -65,7 +65,7 @@ async def upload_my_avatar(file: UploadFile = File(...), db: Session = Depends(g
         file_path = os.path.join(upload_path, avatar_filename)
 
         print(file_path)
-        with aiofiles.open(file_path, 'wb') as f:
+        async with aiofiles.open(file_path, 'wb') as f:
             await f.write(contents)
         
         current_user.avatar = avatar_filename
@@ -74,9 +74,9 @@ async def upload_my_avatar(file: UploadFile = File(...), db: Session = Depends(g
     except Exception as e:
         return {"message": f"There was an error uploading your avatar: {e}"}
     finally:
-        file.file.close()
+        await file.close()
 
-    return {"message": f"Successfully uploaded new avatar {avatar_filename}"}
+    return {"detail": "New avatar was uploaded."}
 
 
 @router.get('/user/avatar', response_class=FileResponse)

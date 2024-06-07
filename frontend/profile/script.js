@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
         User.logout();
     });
 
-    document.querySelector('.user-form').addEventListener('submit', (event) => {
+    document.getElementById('info-form').addEventListener('submit', (event) => {
         event.preventDefault();
         User.updateUserDetails();
     });
@@ -16,5 +16,16 @@ document.addEventListener('DOMContentLoaded', () => {
         User.deleteUserAccount();
     });
 
-    User.getUserAvatar(); // Добавить вызов для загрузки аватара
+    document.getElementById('avatar-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        await User.uploadUserAvatar();
+        displayAvatar(); // Обновление аватара на странице после загрузки
+    });
+
+    displayAvatar(); // Загрузить аватар при загрузке страницы
 });
+
+async function displayAvatar() {
+    const avatar_path = await User.getUserAvatar();
+    document.getElementById("user-photo").src = avatar_path;
+}

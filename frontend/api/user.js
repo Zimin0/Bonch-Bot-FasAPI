@@ -196,13 +196,44 @@ export class User {
             });
 
             if (response.ok) {
-                const avatarUrl = response.url;
-                document.getElementById("user-photo").src = avatarUrl;
+                console.log(`Путь к аватару: ${response.url}`)
+                return response.url;
             } else {
                 console.error("Ошибка при получении аватара", response.status);
             }
         } catch (error) {
             console.error("Ошибка при выполнении запроса", error);
+        }
+    }
+
+    static async uploadUserAvatar() {
+        const token = await User.get_auth_token();
+        if (!token) return;  // No token found, user is not logged in
+
+        const avatarInput = document.getElementById("avatar");
+        const formData = new FormData();
+        formData.append("file", avatarInput.files[0]);
+
+        try {
+            const response = await fetch(`${base_api_url}/user/avatar`, {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                },
+                body: formData
+            });
+
+            if (response.ok) {
+                alert("Аватар успешно загружен");
+                // const avatarUrl = await User.getUserAvatar();
+                // return avatarUrl;
+            } else {
+                console.error("Ошибка при загрузке аватара", response.status);
+                alert("Ошибка при загрузке аватара");
+            }
+        } catch (error) {
+            console.error("Ошибка при выполнении запроса", error);
+            alert("Ошибка при выполнении запроса");
         }
     }
 }

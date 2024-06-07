@@ -21,8 +21,14 @@
     <div class="user-photo">
         <img id="user-photo" src="" alt="User Photo" />
     </div>
-
-    <form class="user-form">
+    
+    <form id="avatar-form" class="user-form" enctype="multipart/form-data">
+        <label for="avatar">Загрузить аватар:</label>
+        <input type="file" id="avatar" name="avatar" accept="image/*" required>
+        <button type="submit">Загрузить</button>
+    </form>
+    
+    <form id="info-form" class="user-form">
         <label for="email">Электронная почта:</label>
         <input type="email" id="email" required>
         
