@@ -27,6 +27,19 @@ h1, h2 {
     text-align: center;
 }
 
+.user-photo {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.user-photo img {
+    border: 5px solid #ccc; /* Рамка вокруг фотографии */
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}
+
 .user-form {
     max-width: 400px;
     margin: 20px auto;
@@ -80,6 +93,27 @@ h1, h2 {
 
 .delete-button:hover {
     background-color: #cc0000; /* Темно-красный при наведении */
+    transition: background-color 0.3s;
+}
+
+.terms-container {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.terms-button {
+    padding: 10px 15px;
+    color: white;
+    background-color: #808080; /* Серый цвет для кнопок */
+    border: none;
+    cursor: pointer;
+    width: 250px; /* Fixed width */
+    text-align: center;
+    margin: 0 auto;
+}
+
+.terms-button:hover {
+    background-color: #575757; /* Темно-серый при наведении */
     transition: background-color 0.3s;
 }
 

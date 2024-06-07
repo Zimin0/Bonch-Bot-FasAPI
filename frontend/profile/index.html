@@ -5,19 +5,24 @@
     <link rel="stylesheet" type="text/css" href="styles.css">
     <script type="module" src="script.js" defer></script>
 </head>
-<body onload="User.update_user_info();">
+<body>
     <div class="menu">
         <a href="/">Главная</a>
         <a href="/frontend/settings">Админ панель</a>
         <a href="/frontend/auth/login">Вход</a>
         <a href="/frontend/auth/register">Регистрация</a>
-        <a id="logout_button" onclick="User.logout()">Выйти</a>
+        <a id="logout_button">Выйти</a>
         <a href="/frontend/schedule/">Бронирование</a>
         <span id="username" style="float:right; color:white; padding: 14px 16px;"></span>
     </div>
 
     <h1>Личный кабинет</h1>
-    <form class="user-form" onsubmit="event.preventDefault(); User.updateUserDetails();">
+    
+    <div class="user-photo">
+        <img id="user-photo" src="" alt="User Photo" />
+    </div>
+
+    <form class="user-form">
         <label for="email">Электронная почта:</label>
         <input type="email" id="email" required>
         
@@ -29,7 +34,15 @@
         
         <button type="submit">Обновить информацию</button>
     </form>
-    <button class="delete-button" onclick="User.deleteUserAccount()">Удалить аккаунт</button>
+    
+    <button class="delete-button">Удалить аккаунт</button>
+    
+    <div class="terms-container">
+        <a href="terms_of_use.pdf" download>
+            <button class="terms-button">Скачать условия пользования сайтом</button>
+        </a>
+    </div>
+    
     <div id="message-container"></div>
 </body>
 </html>

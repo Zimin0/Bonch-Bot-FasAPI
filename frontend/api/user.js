@@ -1,4 +1,5 @@
-import { base_api_url } from '../variables.js'
+import { base_api_url } from '../variables.js';
+
 /**
  * Класс Юзера в api.
  */
@@ -50,10 +51,76 @@ export class User {
         const user_info = await User.get_user_info(token);
         if (user_info) {
             document.getElementById("username").textContent = `Hello, ${user_info.email}`;
+            document.getElementById("email").value = user_info.email;
+            document.getElementById("tg_tag").value = user_info.tg_tag;
         } else {
             document.getElementById("username").textContent = 'Not logged yet';
         }
     }
+
+    /**
+     * Обновляет данные пользователя.
+     */
+    static async updateUserDetails() {
+        const token = await User.get_auth_token();
+        if (!token) return;  // No token found, user is not logged in
+
+        const email = document.getElementById("email").value;
+        const tg_tag = document.getElementById("tg_tag").value;
+        const password = document.getElementById("password").value;
+
+        try {
+            const response = await fetch(`${base_api_url}/user`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({ email, tg_tag, password })
+            });
+
+            if (response.ok) {
+                alert("Информация успешно обновлена");
+            } else {
+                console.error("Ошибка при обновлении информации", response.status);
+                alert("Ошибка при обновлении информации");
+            }
+        } catch (error) {
+            console.error("Ошибка при выполнении запроса", error);
+            alert("Ошибка при выполнении запроса");
+        }
+    }
+
+    /**
+     * Удаляет аккаунт пользователя.
+     */
+    static async deleteUserAccount() {
+        const token = await User.get_auth_token();
+        if (!token) return;
+
+        try {
+            const response = await fetch(`${base_api_url}/user`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
+            if (response.ok) {
+                alert("Аккаунт успешно удален");
+                localStorage.removeItem("token");
+                window.location.href = "/frontend/auth/login";
+            } else {
+                console.error("Ошибка при удалении аккаунта", response.status);
+                alert("Ошибка при удалении аккаунта");
+            }
+        } catch (error) {
+            console.error("Ошибка при выполнении запроса", error);
+            alert("Ошибка при выполнении запроса");
+        }
+    }
+
     /**
      * Выход из аккаунта -> удаление токена.
      */
@@ -61,7 +128,7 @@ export class User {
         const token = window.localStorage.getItem('token');
         if (token) {
             localStorage.removeItem("token");
-            console.log("Токен удален.")
+            console.log("Токен удален.");
             window.location.href = "/frontend/auth/login";
         } else {
             console.error("Не удалось найти токен и выйти из системы.");
@@ -69,54 +136,16 @@ export class User {
     }
 
     /**
-    Проверяет, зашел ли пользователь в систему перед доступом ко странице.
-    В противном случае - редирект на страницу входа.
-    */
-    static async checkAuthToken() {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            window.location.href = '/frontend/auth/login';
-        }
-    }
-
-    static async isAdmin(token) {
-        try {
-            const userInfo = await User.get_user_info(token);
-            if (userInfo) {
-                return userInfo.is_superuser;
-            } else {
-                console.error('User info is null');
-                return false;
-            }
-        } catch (error) {
-            console.error(`Error checking admin status: ${error.message}`);
-            return false;
-        }
-    }
-
-    static async pageOnlyForAdmin() {
-        const token = localStorage.getItem('token');
-        if (!token) return;
-        const is_admin = await User.isAdmin(token);
-        if (!is_admin){
-            alert("Вы не администратор. 403 ошибка.");
-            window.location.href = "/frontend/auth/login/"
-        }
-    }
-
-    
-
-    /**
      * Вход в систему -> получение токена.
      */
     static async login() {
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
-        
+
         const formData = new URLSearchParams();
         formData.append('username', email);
         formData.append('password', password);
-    
+
         const response = await fetch(`${base_api_url}/token`, {
             method: 'POST',
             headers: {
@@ -124,7 +153,7 @@ export class User {
             },
             body: formData.toString(),
         });
-    
+
         if (response.ok) {
             const data = await response.json();
             alert("Вход выполнен успешно");
@@ -145,12 +174,35 @@ export class User {
             },
             body: JSON.stringify({ email, tg_tag, password }),
         });
-    
+
         if (response.ok) {
             alert("Регистрация успешна");
             window.location.href = "/frontend/auth/login";
         } else {
             alert("Ошибка регистрации");
+        }
+    }
+
+    static async getUserAvatar() {
+        const token = await User.get_auth_token();
+        if (!token) return;
+
+        try {
+            const response = await fetch(`${base_api_url}/user/avatar`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
+            if (response.ok) {
+                const avatarUrl = response.url;
+                document.getElementById("user-photo").src = avatarUrl;
+            } else {
+                console.error("Ошибка при получении аватара", response.status);
+            }
+        } catch (error) {
+            console.error("Ошибка при выполнении запроса", error);
         }
     }
 }
