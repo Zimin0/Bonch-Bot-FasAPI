@@ -3,7 +3,7 @@ from typing import Optional
 
 class UserCreate(BaseModel):
     email: EmailStr
-    tg_tag: str = None
+    tg_tag: str = Field(..., pattern=r"@\w+")
     password: str = Field(..., min_length=4)
 
 class ShowUser(BaseModel):
