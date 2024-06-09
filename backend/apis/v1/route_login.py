@@ -7,7 +7,7 @@ from core.security import create_access_token
 from schemas.token import Token
 from schemas.user import UserCreate
 from db.session import get_db
-from db.repository.user import read_user
+from db.repository.user import read_user_db
 from db.models.user import User
 
 router = APIRouter()
@@ -47,7 +47,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     return {"access_token": access_token, "token_type": "bearer"}
 
 def authenticate_user(email: str, password: str, db: Session):
-    user = read_user(email=email, db=db)
+    user = read_user_db(email=email, db=db)
     if not user:
         print(f"User with email {email} not found.")
         return False

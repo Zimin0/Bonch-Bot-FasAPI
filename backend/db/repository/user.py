@@ -12,7 +12,7 @@ from core.config import project_settings
 def __read_user_by_email(db: Session, email: str) -> Optional[User]:
     return db.query(User).filter_by(email=email).first()
 
-def create_user(db: Session, user: UserCreate) -> Optional[User]:
+def create_user_db(db: Session, user: UserCreate) -> Optional[User]:
     """ CREATE """
     user_in_db = __read_user_by_email(db, user.email)
     if user_in_db:
@@ -30,12 +30,12 @@ def create_user(db: Session, user: UserCreate) -> Optional[User]:
     db.refresh(user_obj)
     return user_obj
 
-def read_user(db: Session, email: str) -> Optional[User]:
+def read_user_db(db: Session, email: str) -> Optional[User]:
     """ READ """
     user_in_db = __read_user_by_email(db, email)
     return user_in_db
 
-def delete_user(db: Session, email: str) -> bool:
+def delete_user_db(db: Session, email: str) -> bool:
     """ DELETE """
     user_in_db = __read_user_by_email(db, email)
     if user_in_db:
@@ -44,7 +44,7 @@ def delete_user(db: Session, email: str) -> bool:
     db.commit()
     return True
 
-def update_user(db: Session, user: UserCreate) -> Optional[User]:
+def update_user_db(db: Session, user: UserCreate) -> Optional[User]:
     """ UPDATE """
     user_in_db = __read_user_by_email(db, user.email)
     if not user_in_db:
@@ -56,7 +56,7 @@ def update_user(db: Session, user: UserCreate) -> Optional[User]:
     db.refresh(user_in_db)
     return user_in_db
 
-async def update_avatar(db: Session, user: User, file: UploadFile) -> str:
+async def update_avatar_db(db: Session, user: User, file: UploadFile) -> str:
     """ UPDATE. Avatart (profile picture) """
     contents = await file.read()
     upload_path = project_settings.UPLOAD_PATH
@@ -77,7 +77,7 @@ async def update_avatar(db: Session, user: User, file: UploadFile) -> str:
 
     return avatar_filename
 
-def read_avatar_path(user: User) -> Optional[str]:
+def read_avatar_db(user: User) -> Optional[str]:
     """ READ. Path to user's avatar."""
     if not user.avatar:
         return None
