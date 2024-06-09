@@ -9,12 +9,12 @@ from db.models.user import User
 from core.hashing import Hasher
 from core.config import project_settings
 
-def __get_user_by_email(db: Session, email: str) -> Optional[User]:
+def __read_user_by_email(db: Session, email: str) -> Optional[User]:
     return db.query(User).filter_by(email=email).first()
 
-def create_new_user(db: Session, user: UserCreate) -> Optional[User]:
+def create_user(db: Session, user: UserCreate) -> Optional[User]:
     """ CREATE """
-    user_in_db = __get_user_by_email(db, user.email)
+    user_in_db = __read_user_by_email(db, user.email)
     if user_in_db:
         return None
     user_obj = User(
@@ -31,12 +31,12 @@ def create_new_user(db: Session, user: UserCreate) -> Optional[User]:
 
 def read_user(db: Session, email: str) -> Optional[User]:
     """ READ """
-    user_in_db = __get_user_by_email(db, email)
+    user_in_db = __read_user_by_email(db, email)
     return user_in_db
 
 def delete_user(db: Session, email: str) -> bool:
     """ DELETE """
-    user_in_db = __get_user_by_email(db, email)
+    user_in_db = __read_user_by_email(db, email)
     if user_in_db:
         return False
     db.delete(user_in_db)
@@ -45,7 +45,7 @@ def delete_user(db: Session, email: str) -> bool:
 
 def update_user(db: Session, user: UserCreate) -> Optional[User]:
     """ UPDATE """
-    user_in_db = __get_user_by_email(db, user.email)
+    user_in_db = __read_user_by_email(db, user.email)
     if not user_in_db:
         return None
     user_in_db.email = user.email

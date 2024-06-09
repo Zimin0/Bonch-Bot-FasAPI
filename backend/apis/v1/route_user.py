@@ -6,7 +6,7 @@ from schemas.user import UserCreate, UserGet
 from db.models.user import User
 from db.session import get_db
 from apis.v1.dependencies import get_current_active_superuser, get_current_user
-from db.repository.user import create_new_user, read_user, delete_user, update_user, update_avatar, read_avatar_path
+from db.repository.user import create_user, read_user, delete_user, update_user, update_avatar, read_avatar_path
 
 router = APIRouter()
 
@@ -25,9 +25,9 @@ async def user_by_email(email:str, db: Session = Depends(get_db)):
     return user_in_db
 
 @router.post('/user', response_model=UserGet, status_code=status.HTTP_201_CREATED)
-def create_user(user: UserCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser),):
+def create_new_user(user: UserCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser),):
     """ POST """
-    user_in_db = create_new_user(db=db, user=user_in_db)
+    user_in_db = create_user(db=db, user=user_in_db)
     if not user_in_db: # пользователь уже существует
         raise HTTPException(status_code=400, detail="Such a user already exists.")
     return user_in_db
@@ -54,7 +54,7 @@ async def upload_my_avatar(file: UploadFile = File(...), db: Session = Depends(g
     try:
         avatar_filename = await update_avatar(db=db, user=current_user, file=file)
     except Exception as error:
-        raise HTTPException(status_code=500, detail=f"There was an error uploading your avatar: {e}")
+        raise HTTPException(status_code=500, detail=f"There was an error uploading your avatar: {error}")
     finally:
         await file.close()
 
