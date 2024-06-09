@@ -5,7 +5,7 @@ from jose import JWTError, jwt
 from core.config import project_settings
 from db.session import get_db
 from db.models.user import User
-from db.repository.user import get_user
+from db.repository.user import read_user
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
 
@@ -25,7 +25,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
     except JWTError:
         raise credentials_exception
     
-    user = get_user(email=username, db=db)
+    user = read_user(db=db, email=username)
     if user is None:
         raise credentials_exception
         

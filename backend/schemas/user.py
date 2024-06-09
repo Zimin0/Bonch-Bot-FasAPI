@@ -6,7 +6,7 @@ class UserCreate(BaseModel):
     tg_tag: str = Field(..., pattern=r"@\w+")
     password: str = Field(..., min_length=4)
 
-class ShowUser(BaseModel):
+class UserGet(BaseModel):
     id: int 
     email: EmailStr
     tg_tag: Optional[str]

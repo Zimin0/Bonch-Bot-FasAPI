@@ -1,18 +1,14 @@
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
-from fastapi import Depends, APIRouter, Request
+from fastapi import Depends, APIRouter, status, HTTPException
 from sqlalchemy.orm import Session
-from fastapi import status, HTTPException
 
-from db.session import get_db
 from core.hashing import Hasher
-from schemas.token import Token
-from db.repository.user import get_user
 from core.security import create_access_token
-from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse
-from schemas.user import UserCreate, ShowUser
+from schemas.token import Token
+from schemas.user import UserCreate
+from db.session import get_db
+from db.repository.user import read_user
 from db.models.user import User
-from db.repository.user import create_new_user
 
 router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
@@ -51,7 +47,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     return {"access_token": access_token, "token_type": "bearer"}
 
 def authenticate_user(email: str, password: str, db: Session):
-    user = get_user(email=email, db=db)
+    user = read_user(email=email, db=db)
     if not user:
         print(f"User with email {email} not found.")
         return False
