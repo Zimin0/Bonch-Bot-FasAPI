@@ -17,6 +17,7 @@ def create_user(db: Session, user: UserCreate) -> Optional[User]:
     user_in_db = __read_user_by_email(db, user.email)
     if user_in_db:
         return None
+    
     user_obj = User(
         email=user.email,
         tg_tag=user.tg_tag,
