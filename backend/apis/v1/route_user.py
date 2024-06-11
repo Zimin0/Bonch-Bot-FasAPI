@@ -49,6 +49,15 @@ async def delete_user(db: Session = Depends(get_db), current_user: User = Depend
         raise HTTPException(status_code=404, detail="User not found")
     return {"detail": "User deleted."}
 
+@router.get('/user/avatar/me', response_class=FileResponse)
+async def get_my_avatar(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    """ GET. Получает аватар пользователя. """
+    file_path = read_avatar_db(current_user)
+    if not file_path:
+        raise HTTPException(status_code=404, detail="User's avatar not found.")
+    print(file_path)
+    return FileResponse(file_path)
+
 @router.post("/user/avatar")
 async def upload_my_avatar(file: UploadFile = File(...), db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     """ POST. Загружает аватар пользователя. """
@@ -60,11 +69,3 @@ async def upload_my_avatar(file: UploadFile = File(...), db: Session = Depends(g
         await file.close()
 
     return {"detail": "New avatar was uploaded."}
-
-@router.get('/user/avatar', response_class=FileResponse)
-async def get_my_avatar(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-    """ GET. Получает аватар пользователя. """
-    file_path = read_avatar_db(current_user)
-    if not file_path:
-        raise HTTPException(status_code=404, detail="User's avatar not found.")
-    return FileResponse(file_path)

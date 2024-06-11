@@ -80,8 +80,10 @@ async def update_avatar_db(db: Session, user: User, file: UploadFile) -> str:
 def read_avatar_db(user: User) -> Optional[str]:
     """ READ. Path to user's avatar."""
     if not user.avatar:
+        print(1)
         return None
     file_path = os.path.join(project_settings.UPLOAD_PATH, user.avatar)
     if not os.path.exists(file_path):
+        print(2)
         return None
     return file_path

@@ -220,7 +220,7 @@ export class User {
         if (!token) return;
 
         try {
-            const response = await fetch(`${base_api_url}/user/avatar`, {
+            const response = await fetch(`${base_api_url}/user/avatar/me`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${token}`
