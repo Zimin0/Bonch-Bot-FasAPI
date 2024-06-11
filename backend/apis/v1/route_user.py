@@ -14,6 +14,7 @@ router = APIRouter()
 async def get_my_user(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     """ GET. Возвращает информацию о себе. """
     response_obj = UserGet.model_validate(current_user) # Метод model_validate служит для преобразования ORM модели в объект схемы Pydantic, выполняя валидацию данных в процессе.
+    print(response_obj)
     return response_obj
 
 @router.get("/user/{email}", response_model=UserGet)
