@@ -13,6 +13,13 @@ export class User {
             return null;
         }
     }
+    
+    static async isAdmin(token) {
+        const userInfo = await User.get_user_info(token);
+        if (userInfo) {
+            return userInfo.is_superuser;
+        }
+    }
 
     /**
      * Получает все данные о самом себе, если зашел в аккаунт.
@@ -51,8 +58,12 @@ export class User {
         const user_info = await User.get_user_info(token);
         if (user_info) {
             document.getElementById("username").textContent = `Hello, ${user_info.email}`;
-            document.getElementById("email").value = user_info.email;
-            document.getElementById("tg_tag").value = user_info.tg_tag;
+            if (document.getElementById("email") !== null){
+                document.getElementById("email").value = user_info.email;
+            }
+            if (document.getElementById("tg_tag") !== null){
+                document.getElementById("tg_tag").value = user_info.tg_tag;
+            }
         } else {
             document.getElementById("username").textContent = 'Not logged yet';
         }
@@ -91,6 +102,16 @@ export class User {
         }
     }
 
+    static async pageOnlyForAdmin() {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+        const is_admin = await User.isAdmin(token);
+        if (!is_admin){
+            alert("Вы не администратор. 403 ошибка.");
+            window.location.href = "/frontend/auth/login/";
+        }
+    }
+
     /**
      * Удаляет аккаунт пользователя.
      */
@@ -120,6 +141,17 @@ export class User {
             alert("Ошибка при выполнении запроса");
         }
     }
+    
+     /**
+    Проверяет, зашел ли пользователь в систему перед доступом ко странице.  
+    В противном случае  редирект на страницу входа.
+    */
+    static async checkAuthToken() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = '/frontend/auth/login';
+            }
+        }
 
     /**
      * Выход из аккаунта -> удаление токена.

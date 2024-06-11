@@ -14,6 +14,6 @@ class UserGet(BaseModel):
     avatar: Optional[str]
     is_superuser: bool
 
-    class Config(): # tells pydantic to convert even non dict obj to json
+    class Config():
         orm_mode = True
         from_attributes = True

@@ -15,7 +15,13 @@ User.checkAuthToken(); // Проверяем наличие токена пер�
 const token = await User.get_auth_token();
 var slug = 'TIME_PERIOD_LENGTH';
 const setting = await Setting.getSettingBySlug(slug, token);
-showMessage(`${slug} = ${parseInt(setting.value)/60} минут`, 'success');
+if (setting !== null){
+    showMessage(`${slug} = ${parseInt(setting.value)/60} минут`, 'success');
+}
+else {
+    showMessage(`Не удалось получить настройку ${slug}`, 'error');
+}
+
 
 const StatusEnum = {
     'booked': 'booked',
