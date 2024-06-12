@@ -21,12 +21,12 @@ async def get_all_time_periods(db: Session = Depends(get_db)):
     """ GET all time periods. """
     return read_all_time_periods_db(db)
 
-@router.get('/pc/{computer_id}/time_periods', response_model=list[TimePeriodGet])
+@router.get('/time_periods/pc/{computer_id}', response_model=list[TimePeriodGet])
 async def get_pc_time_periods(computer_id: int, db: Session = Depends(get_db)):
     """ GET time periods of one pc. """
     return read_pc_time_periods_db(computer_id, db)
 
-@router.delete('/pc/{computer_id}/time_periods', status_code=status.HTTP_204_NO_CONTENT)
+@router.delete('/time_periods/pc/{computer_id}', status_code=status.HTTP_204_NO_CONTENT)
 async def delete_pc_time_periods(computer_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
     """ DELETE all time periods of one pc. """
     delete_pc_time_periods_db(computer_id, db)

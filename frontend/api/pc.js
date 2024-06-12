@@ -33,7 +33,7 @@ export class PC {
      */
     static async getPCTimePeriods(pcId, token) {
         try {
-            const response = await fetch(`${base_api_url}/pc/${pcId}/time_periods`, {
+            const response = await fetch(`${base_api_url}/time_periods/pc/${pcId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

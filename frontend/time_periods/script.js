@@ -78,7 +78,7 @@ async function createTimePeriods() {
 
         for (const pc of pcs) {
             // Delete old time periods for this PC
-            await fetch(`${base_api_url}/pc/${pc.id}/time_periods`, {
+            await fetch(`${base_api_url}/time_periods/pc/${pc.id}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`
