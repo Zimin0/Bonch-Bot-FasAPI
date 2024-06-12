@@ -3,7 +3,7 @@ import { base_api_url } from '../variables.js';
 export class Setting {
     static async displaySettings(token) {
         try {
-            const response = await fetch(`${base_api_url}/admin/settings/all`, {
+            const response = await fetch(`${base_api_url}/settings/all`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -43,7 +43,7 @@ export class Setting {
         const slug = document.getElementById("new-slug").value;
         const value = document.getElementById("new-value").value;
 
-        const response = await fetch(`${base_api_url}/admin/setting`, {
+        const response = await fetch(`${base_api_url}/setting`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ export class Setting {
         const slug = document.getElementById(`slug-${id}`).value;
         const value = document.getElementById(`value-${id}`).value;
 
-        const response = await fetch(`${base_api_url}/admin/setting/${id}`, {
+        const response = await fetch(`${base_api_url}/setting/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -81,7 +81,7 @@ export class Setting {
     }
 
     static async deleteSetting(id, token) {
-        const response = await fetch(`${base_api_url}/admin/setting/${id}`, {
+        const response = await fetch(`${base_api_url}/setting/${id}`, {
             method: 'DELETE',
             headers: {
                 "Authorization": `Bearer ${token}`
@@ -99,7 +99,7 @@ export class Setting {
      * Получает настройку по слагу.
      */
     static async getSettingBySlug(slug, token){
-        const response = await fetch(`${base_api_url}/admin/setting/slug/${slug}`, {
+        const response = await fetch(`${base_api_url}/setting/slug/${slug}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`

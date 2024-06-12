@@ -15,12 +15,12 @@ from db.repository.setting import (
 
 router = APIRouter()
 
-@router.get('/admin/settings/all', response_model=list[SettingGet])
+@router.get('/settings/all', response_model=list[SettingGet])
 async def get_all_settings(db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
     """ GET all settings. """
     return read_all_settings_db(db)
 
-@router.get("/admin/setting/slug/{setting_slug}")
+@router.get("/setting/slug/{setting_slug}")
 async def get_setting_by_slug(setting_slug: str, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
     """ GET setting by slug. """
     db_setting = read_setting_by_slug_db(setting_slug, db)
@@ -28,12 +28,12 @@ async def get_setting_by_slug(setting_slug: str, db: Session = Depends(get_db), 
         raise HTTPException(status_code=404, detail="Setting not found")
     return db_setting
 
-@router.post("/admin/setting", status_code=status.HTTP_201_CREATED)
+@router.post("/setting", status_code=status.HTTP_201_CREATED)
 async def create_setting(setting: SettingCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
     """ POST create setting. """
     return create_setting_db(setting, db)
 
-@router.put("/admin/setting/{setting_id}", status_code=status.HTTP_201_CREATED)
+@router.put("/setting/{setting_id}", status_code=status.HTTP_201_CREATED)
 async def update_setting(setting_id: int, setting: SettingUpdate, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
     """ UPDATE setting. """
     db_setting = update_setting_db(setting_id, setting, db)
@@ -41,7 +41,7 @@ async def update_setting(setting_id: int, setting: SettingUpdate, db: Session = 
         raise HTTPException(status_code=404, detail="Setting not found")
     return db_setting
 
-@router.delete("/admin/setting/{setting_id}")
+@router.delete("/setting/{setting_id}")
 async def delete_setting(setting_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
     """ DELETE setting. """
     db_setting = delete_setting_db(setting_id, db)
