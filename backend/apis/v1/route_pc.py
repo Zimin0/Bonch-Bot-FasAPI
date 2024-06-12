@@ -33,8 +33,8 @@ async def get_pc(physical_number: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="PC not found.")
     return db_pc
 
-@router.put('/pc', response_model=PCGet)
-async def update_pc(pc: PCCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
+@router.put('/pc/{pc_id}', response_model=PCGet)
+async def update_pc(pc_id: int, pc: PCCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
     """ UPDATE PC. """
     db_pc = update_pc_db(db=db, pc=pc) 
     if db_pc is None:
