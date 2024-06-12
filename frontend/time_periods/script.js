@@ -78,7 +78,7 @@ async function createTimePeriods() {
 
         for (const pc of pcs) {
             // Delete old time periods for this PC
-            await fetch(`${base_api_url}/admin/pc/${pc.id}/time_periods`, {
+            await fetch(`${base_api_url}/pc/${pc.id}/time_periods`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -98,7 +98,7 @@ async function createTimePeriods() {
                     computer_id: pc.id
                 };
 
-                const response = await fetch(`${base_api_url}/admin/time_period`, {
+                const response = await fetch(`${base_api_url}/time_period`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
