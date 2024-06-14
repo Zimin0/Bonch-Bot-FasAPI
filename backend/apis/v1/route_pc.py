@@ -17,14 +17,6 @@ async def get_all_pc(db: Session = Depends(get_db)):
     all_pcs = read_pc_all_db(db=db)
     return all_pcs
 
-@router.post('/pc', status_code=status.HTTP_201_CREATED, response_model=PCGet)
-async def create_pc(pc: PCCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
-    """ POST create PC. """
-    pc_in_db = create_pc_db(db=db, pc=pc)
-    if not pc_in_db:
-        raise HTTPException(status_code=404, detail="PC already exists.")
-    return pc_in_db
-
 @router.get('/pc/{physical_number}', response_model=PCGet)
 async def get_pc(physical_number: int, db: Session = Depends(get_db)):
     """ GET PC by physical_number. """
@@ -33,8 +25,16 @@ async def get_pc(physical_number: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="PC not found.")
     return db_pc
 
-@router.put('/pc/{pc_id}', response_model=PCGet)
-async def update_pc(pc_id: int, pc: PCCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
+@router.post('/pc', status_code=status.HTTP_201_CREATED, response_model=PCGet)
+async def create_pc(pc: PCCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
+    """ POST create PC. """
+    pc_in_db = create_pc_db(db=db, pc=pc)
+    if not pc_in_db:
+        raise HTTPException(status_code=404, detail="PC already exists.")
+    return pc_in_db
+
+@router.put('/pc', response_model=PCGet)
+async def update_pc(pc: PCCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
     """ UPDATE PC. """
     db_pc = update_pc_db(db=db, pc=pc) 
     if db_pc is None:

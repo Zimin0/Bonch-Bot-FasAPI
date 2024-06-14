@@ -6,9 +6,9 @@ def read_all_time_periods_db(db: Session):
     """ READ all time periods. """
     return db.query(TimePeriod).all()
 
-def read_pc_time_periods_db(computer_id: int, db: Session):
+def read_pc_time_periods_db(pc_physical_number: int, db: Session):
     """ READ time periods of one pc. """
-    return db.query(TimePeriod).filter(TimePeriod.computer_id == computer_id).order_by(TimePeriod.time_start).all()
+    return db.query(TimePeriod).filter(TimePeriod.computer_id == pc_physical_number).order_by(TimePeriod.time_start).all()
 
 def delete_pc_time_periods_db(computer_id: int, db: Session):
     """ DELETE all time periods of one pc. """

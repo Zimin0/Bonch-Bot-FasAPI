@@ -11,11 +11,6 @@ def __read_pc_by_field(db: Session, field_name: str, value: Any) -> Optional[PC]
 def read_pc_all_db(db: Session) -> list[PC]:
     return db.query(PC).all()
 
-def read_pc_by_id_db(db: Session, id:int) -> Optional[PC]:
-    """ READ. by ID"""
-    pc_in_db = __read_pc_by_field(db=db, field_name="id", value=id)
-    return pc_in_db
-
 def read_pc_by_physical_number_db(db: Session, physical_number:int) -> Optional[PC]:
     """ READ. by physical_number"""
     pc_in_db = __read_pc_by_field(db=db, field_name="physical_number", value=physical_number)

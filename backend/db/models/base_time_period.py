@@ -17,9 +17,9 @@ class BaseTimePeriod:
         return Column(Time, nullable=False)
 
     @declared_attr
-    def computer_id(cls):
-        return Column(Integer, ForeignKey("pcs.id"), nullable=False)
+    def pc_physical_number(cls):
+        return Column(Integer, ForeignKey("pcs.physical_number"), nullable=False)
 
     @declared_attr
     def computer(cls):
-        return relationship("PC")
+        return relationship("PC", back_populates="time_periods")

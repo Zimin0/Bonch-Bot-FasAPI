@@ -21,16 +21,16 @@ async def get_all_time_periods(db: Session = Depends(get_db)):
     """ GET all time periods. """
     return read_all_time_periods_db(db)
 
-@router.get('/time_periods/pc/{computer_id}', response_model=list[TimePeriodGet])
-async def get_pc_time_periods(computer_id: int, db: Session = Depends(get_db)):
+@router.get('/time_periods/pc/{pc_physical_number}', response_model=list[TimePeriodGet])
+async def get_pc_time_periods(pc_physical_number: int, db: Session = Depends(get_db)):
     """ GET time periods of one pc. """
-    return read_pc_time_periods_db(computer_id, db)
+    return read_pc_time_periods_db(pc_physical_number, db)
 
-@router.delete('/time_periods/pc/{computer_id}', status_code=status.HTTP_204_NO_CONTENT)
-async def delete_pc_time_periods(computer_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
+@router.delete('/time_periods/pc/{pc_physical_number}', status_code=status.HTTP_204_NO_CONTENT)
+async def delete_pc_time_periods(pc_physical_number: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_superuser)):
     """ DELETE all time periods of one pc. """
-    delete_pc_time_periods_db(computer_id, db)
-    return {"detail": f"All time periods for PC {computer_id} were deleted."}
+    delete_pc_time_periods_db(pc_physical_number, db)
+    return {"detail": f"All time periods for PC {pc_physical_number} were deleted."}
 
 @router.get("/time_period/{time_period_id}", response_model=TimePeriodGet)
 async def get_time_period_by_id(time_period_id: int, db: Session = Depends(get_db)):
