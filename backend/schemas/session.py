@@ -5,7 +5,7 @@ class SessionGet(BaseModel):
     id: int
     time_start: time
     time_end: time
-    computer_id: int
+    pc_physical_number: int
     tg_tag: str
 
     class Config:
@@ -14,7 +14,7 @@ class SessionGet(BaseModel):
 class SessionCreate(BaseModel):
     time_start: time
     time_end: time
-    computer_id: int
+    pc_physical_number: int
     tg_tag: str
 
     class Config:
@@ -23,7 +23,7 @@ class SessionCreate(BaseModel):
 class SessionUpdate(BaseModel):
     time_start: time
     time_end: time
-    computer_id: int
+    pc_physical_number: int
     tg_tag: str
 
     class Config:

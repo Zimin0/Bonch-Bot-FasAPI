@@ -78,7 +78,7 @@ async function createTimePeriods() {
 
         for (const pc of pcs) {
             // Delete old time periods for this PC
-            await fetch(`${base_api_url}/time_periods/pc/${pc.id}`, {
+            await fetch(`${base_api_url}/time_periods/pc/${pc.physical_number}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -95,7 +95,7 @@ async function createTimePeriods() {
                     status: StatusEnum['Свободно'], // Use the correct enum value
                     time_start: timeStart.toISOString().split('T')[1].slice(0, 8),
                     time_end: timeEnd.toISOString().split('T')[1].slice(0, 8),
-                    computer_id: pc.id
+                    pc_physical_number: pc.physical_number
                 };
 
                 const response = await fetch(`${base_api_url}/time_period`, {

@@ -31,9 +31,9 @@ export class PC {
     /**
      * Подтягивает все временные промежутки существующих ПК.
      */
-    static async getPCTimePeriods(pcId, token) {
+    static async getPCTimePeriods(physical_number, token) {
         try {
-            const response = await fetch(`${base_api_url}/time_periods/pc/${pcId}`, {
+            const response = await fetch(`${base_api_url}/time_periods/pc/${physical_number}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -49,11 +49,11 @@ export class PC {
                 }));
             } else {
                 const errorText = await response.text();
-                console.error(`Failed to fetch time periods for PC ${pcId}: ${response.status} - ${response.statusText} - ${errorText}`);
+                console.error(`Failed to fetch time periods for PC ${physical_number}: ${response.status} - ${response.statusText} - ${errorText}`);
                 return [];
             }
         } catch (error) {
-            console.error(`Error fetching time periods for PC ${pcId}: ${error.message}`);
+            console.error(`Error fetching time periods for PC ${physical_number}: ${error.message}`);
             return [];
         }
     }

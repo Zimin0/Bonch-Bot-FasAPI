@@ -8,11 +8,11 @@ def read_all_time_periods_db(db: Session):
 
 def read_pc_time_periods_db(pc_physical_number: int, db: Session):
     """ READ time periods of one pc. """
-    return db.query(TimePeriod).filter(TimePeriod.computer_id == pc_physical_number).order_by(TimePeriod.time_start).all()
+    return db.query(TimePeriod).filter(TimePeriod.pc_physical_number == pc_physical_number).order_by(TimePeriod.time_start).all()
 
-def delete_pc_time_periods_db(computer_id: int, db: Session):
+def delete_pc_time_periods_db(pc_physical_number: int, db: Session):
     """ DELETE all time periods of one pc. """
-    db.query(TimePeriod).filter(TimePeriod.computer_id == computer_id).delete()
+    db.query(TimePeriod).filter(TimePeriod.pc_physical_number == pc_physical_number).delete()
     db.commit()
 
 def read_time_period_by_id_db(time_period_id: int, db: Session):
@@ -24,7 +24,7 @@ def create_time_period_db(time_period: TimePeriodCreate, db: Session):
     db_time_period = TimePeriod(
         time_start=time_period.time_start,
         time_end=time_period.time_end,
-        computer_id=time_period.computer_id,
+        pc_physical_number=time_period.pc_physical_number,
         status=time_period.status
     )
     db.add(db_time_period)
@@ -39,7 +39,7 @@ def update_time_period_db(time_period_id: int, time_period: TimePeriodUpdate, db
         return None
     db_time_period.time_start = time_period.time_start
     db_time_period.time_end = time_period.time_end
-    db_time_period.computer_id = time_period.computer_id
+    db_time_period.pc_physical_number = time_period.pc_physical_number
     db_time_period.status = time_period.status
     db.commit()
     db.refresh(db_time_period)

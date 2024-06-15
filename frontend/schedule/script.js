@@ -1,7 +1,3 @@
-// import { base_api_url } from '../base_api_url.js';
-// import { get_auth_token, logout, update_user_info } from '../user_info.js';
-// import { checkAuthToken } from '../check_login.js';
-
 import { User } from '../api/user.js'
 import { PC } from '../api/pc.js'
 import { processLogoutButton } from '../common.js'
@@ -24,8 +20,8 @@ async function displayTimePeriods() {
     if (!token) return;
     const pcs = await PC.getPCs(token);
     for (let pc of pcs) {
-        let timePeriods = await PC.getPCTimePeriods(pc.id, token);
-        createAndAppendBlock('pc-containers', pc.id, timePeriods);
+        let timePeriods = await PC.getPCTimePeriods(pc.physical_number, token);
+        createAndAppendBlock('pc-containers', pc.physical_number, timePeriods);
     }
 }
 
@@ -33,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     displayTimePeriods();
 });
 
-function createAndAppendBlock(containerId, pcNumber, timeSlots) {
+function createAndAppendBlock(containerId, physical_number, timeSlots) {
     const container = document.getElementById(containerId);
     if (!container) return;
 
@@ -42,7 +38,7 @@ function createAndAppendBlock(containerId, pcNumber, timeSlots) {
 
     const pcBlock = document.createElement('div');
     pcBlock.className = 'pc-block';
-    pcBlock.textContent = pcNumber;
+    pcBlock.textContent = physical_number;
 
     pcContainer.appendChild(pcBlock);
 

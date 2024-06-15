@@ -10,7 +10,7 @@ class StatusEnum(str, Enum):
 class TimePeriodBase(BaseModel):
     time_start: time
     time_end: time
-    computer_id: int
+    pc_physical_number: int
     status: StatusEnum = StatusEnum.free
 
     class Config:
