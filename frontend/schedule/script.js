@@ -2,15 +2,13 @@ import { User } from '../api/user.js'
 import { PC } from '../api/pc.js'
 import { processLogoutButton } from '../common.js'
 
-processLogoutButton();
-
-if (!User.isAdmin()){
-    displayNotAdminMessage();
-}
-
 //////////////////////
-User.checkAuthToken(); // Проверяем наличие токена перед загрузкой страницы
+processLogoutButton(); // Обработка нажатия на кнопку Выйти
 //////////////////////
+
+/////////////////////////////
+User.pageOnlyForLoggedUser(); // Страница только для вошедших пользователей
+/////////////////////////////
 
 /**
  * Выводит все временные промежутки в шаблон.

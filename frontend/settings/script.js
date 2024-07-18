@@ -1,8 +1,7 @@
-// Import necessary modules and functions
 import { User } from '../api/user.js'
 import { PC } from '../api/pc.js'
 import { Setting } from '../api/setting.js'
-import { processLogoutButton, showMessage } from '../common.js'
+import { processLogoutButton } from '../common.js'
 
 ////////////////////////
 User.pageOnlyForAdmin(); // Эта страница может быть открыта только админом.
@@ -12,11 +11,17 @@ User.pageOnlyForAdmin(); // Эта страница может быть откр
 processLogoutButton(); // Обработка нажатия на кнопку Выйти
 //////////////////////
 
-//////////////////////
-User.checkAuthToken(); // Проверяем наличие токена перед загрузкой страницы
-//////////////////////
 
-// Define the functions to be used in the HTML
+/**
+ * Подтягивает данные новой настройки из формы.
+ */
+function getSettingData(){
+    const name = document.getElementById("new-name").value;
+    const slug = document.getElementById("new-slug").value;
+    const value = document.getElementById("new-value").value;
+    return {name, slug, value};   
+}
+
 async function getTokenAndDisplaySettings() {
     const token = await User.get_auth_token();
     if (!token) return;
@@ -26,16 +31,15 @@ async function getTokenAndDisplaySettings() {
 async function getTokenAndAddSetting() {
     const token = await User.get_auth_token();
     if (!token) return;
-    Setting.addSetting(token);
+    const {name, slug, value} = getSettingData();
+    Setting.addSetting(token, name, slug, value);
 }
 
 async function getSetting() {
     const token = await User.get_auth_token();
     if (!token) return;
-
 }
 
-// Ensure functions are accessible in the global scope
 window.User = User;
 window.PC = PC;
 window.Setting = Setting;

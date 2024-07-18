@@ -38,11 +38,7 @@ export class Setting {
         }
     }
 
-    static async addSetting(token) {
-        const name = document.getElementById("new-name").value;
-        const slug = document.getElementById("new-slug").value;
-        const value = document.getElementById("new-value").value;
-
+    static async addSetting(token, name, slug, value) {
         const response = await fetch(`${base_api_url}/setting`, {
             method: 'POST',
             headers: {
@@ -51,7 +47,8 @@ export class Setting {
             },
             body: JSON.stringify({ name, slug, value }),
         });
-
+        console.log(JSON.stringify({ name, slug, value }));
+    
         if (response.ok) {
             location.reload();
         } else {

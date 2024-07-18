@@ -14,6 +14,9 @@ export class User {
         }
     }
     
+    /**
+     * Проверяет, является ли пользователь админом. 
+     */
     static async isAdmin(token) {
         const userInfo = await User.get_user_info(token);
         if (userInfo) {
@@ -102,6 +105,9 @@ export class User {
         }
     }
 
+    /**
+     * Проверяет, является ли пользователь админом.
+     */
     static async pageOnlyForAdmin() {
         const token = localStorage.getItem('token');
         if (!token) return;
@@ -110,6 +116,17 @@ export class User {
             alert("Вы не администратор. 403 ошибка.");
             window.location.href = "/frontend/auth/login/";
         }
+    }
+    
+    /**
+     * Проверяет, вошел ли пользователь в аккаунт.
+     */
+    static async pageOnlyForLoggedUser() {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert("Вы не вошли в систему. 401 ошибка.");
+            window.location.href = "/frontend/auth/login/";
+        };
     }
 
     /**
@@ -141,17 +158,6 @@ export class User {
             alert("Ошибка при выполнении запроса");
         }
     }
-    
-     /**
-    Проверяет, зашел ли пользователь в систему перед доступом ко странице.  
-    В противном случае  редирект на страницу входа.
-    */
-    static async checkAuthToken() {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                window.location.href = '/frontend/auth/login';
-            }
-        }
 
     /**
      * Выход из аккаунта -> удаление токена.

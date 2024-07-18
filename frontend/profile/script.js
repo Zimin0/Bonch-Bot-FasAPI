@@ -1,4 +1,13 @@
 import { User } from '../api/user.js';
+import { processLogoutButton } from '../common.js'
+
+/////////////////////////////
+User.pageOnlyForLoggedUser(); // Страница только для вошедших пользователей
+/////////////////////////////
+
+//////////////////////
+processLogoutButton(); // Обработка нажатия на кнопку Выйти
+//////////////////////
 
 document.addEventListener('DOMContentLoaded', () => {
     User.update_user_info();

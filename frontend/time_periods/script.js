@@ -4,13 +4,15 @@ import { Setting } from '../api/setting.js'
 import { processLogoutButton, showMessage } from '../common.js'
 import { base_api_url } from '../variables.js';
 
-await User.pageOnlyForAdmin();
-
-processLogoutButton();
+await User.pageOnlyForAdmin(); // ??????????????
 
 //////////////////////
-User.checkAuthToken(); // Проверяем наличие токена перед загрузкой страницы
-////////////////////// 
+processLogoutButton(); // Обработка нажатия на кнопку Выйти
+//////////////////////
+
+////////////////////////
+User.pageOnlyForAdmin(); // Эта страница может быть открыта только админом.
+////////////////////////
 
 const token = await User.get_auth_token();
 var slug = 'TIME_PERIOD_LENGTH';

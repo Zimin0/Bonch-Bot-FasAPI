@@ -1,7 +1,9 @@
 import { User } from '../../api/user.js'
 import { processLogoutButton } from '../../common.js'
 
-processLogoutButton();
+//////////////////////
+processLogoutButton(); // Обработка нажатия на кнопку Выйти
+//////////////////////
 
 /**
  * Получает данные (почта, telegram tag, пароль) из формы регистрации.
