@@ -73,7 +73,6 @@ h1, h2 {
 .time-slot-black {
     color: white;
     background-color: #000000;
-    color: white;
 }
 
 .time-slot-red {
@@ -106,36 +105,49 @@ h1, h2 {
     margin-top: 20px;
 }
 
-.time-slot-green {
-    background-color: #62c46c;
+.form-group {
+    margin-bottom: 15px;
 }
 
-.time-slot-red {
-    background-color: #cd3d3d;
+.styled-select {
+    width: 200px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 2px solid #808080;
+    margin-right: 10px;
 }
 
-.time-slot-yellow {
-    background-color: #dcd917;
-}
-
-.time-slot-black {
-    background-color: #000000;
+.styled-button {
+    background-color: #808080;
     color: white;
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-.time-slot-green:hover {
-    background-color: #3e8e41;
+.styled-button:hover {
+    background-color: #575757;
 }
 
-.time-slot-red:hover {
-    background-color: #9e3a3a;
+#sessions-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
 }
 
-.time-slot-yellow:hover {
-    background-color: #76751d;
+#sessions-table th, #sessions-table td {
+    border: 1px solid #808080;
+    padding: 10px;
+    text-align: left;
 }
 
-.time-slot-black:hover {
-    background-color: #000000;
+#sessions-table th {
+    background-color: #f2f2f2;
 }
 
+#sessions-table td {
+    background-color: #ffffff;
+}
