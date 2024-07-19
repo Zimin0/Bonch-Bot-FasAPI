@@ -8,7 +8,7 @@ processLogoutButton(); // Обработка нажатия на кнопку В
 
 /////////////////////////////
 User.pageOnlyForLoggedUser(); // Страница только для вошедших пользователей
-/////////////////////////////
+////////////////////////////
 
 /**
  * Выводит все временные промежутки в шаблон.
@@ -75,6 +75,33 @@ function createAndAppendBlock(containerId, physical_number, timeSlots) {
 function formatTime(timeString) {
     return timeString ? timeString.slice(0, 5) : 'N/A';
 }
+
+/**
+ * Выводит в селектор существующие пк.
+ */
+async function updatePcsInSelector() {
+    const token = await User.get_auth_token();
+    if (!token) return;
+    const selector = document.getElementById("pc-select");
+    const all_pcs = await PC.getPCs(token);
+    console.log(all_pcs);
+    for (let pc of all_pcs){
+        let pc_selector = document.createElement("option");
+        pc_selector.value = pc.physical_number;
+        pc_selector.text = "№" + pc.physical_number;
+        selector.add(pc_selector);
+    };
+}
+
+
+// async function updateTimePeriodsInSelectors() {
+//     const token = await User.get_auth_token();
+//     if (!token) return;
+//     const selector = document.getElementById("start-time");
+    
+// }
+
+updatePcsInSelector();
 
 window.User = User;
 window.PC = PC;
