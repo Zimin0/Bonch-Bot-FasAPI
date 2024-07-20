@@ -15,15 +15,36 @@ User.pageOnlyForAdmin(); // Эта страница может быть откр
 ////////////////////////
 
 const token = await User.get_auth_token();
-var slug = 'TIME_PERIOD_LENGTH';
-const setting = await Setting.getSettingBySlug(slug, token);
-if (setting !== null){
-    showMessage(`${slug} = ${parseInt(setting.value)/60} минут`, 'success');
-}
-else {
-    showMessage(`Не удалось получить настройку ${slug}`, 'error');
-}
 
+const time_period_slug = 'TIME_PERIOD_LENGTH';
+const start_time_slug = "START_TIME";
+const end_time_slug = "END_TIME";
+
+// Только для настроект с значением в минутах //
+const settings_slugs = [time_period_slug, start_time_slug, end_time_slug];
+const settings = await get_settings_by_slugs(settings_slugs);
+
+// console.log(settings);
+// console.log(settings.get("END_TIME").value);
+
+/**
+ * Получает настройки из переданного списка слагов.
+ */
+async function get_settings_by_slugs(sug_list){
+    var settings = new Map();
+
+    for (var slug of settings_slugs) {
+        const setting_json = await Setting.getSettingBySlug(slug, token);
+        settings.set(slug, setting_json);
+        if (setting_json !== null){
+            showMessage(`${slug} = ${parseInt(setting_json.value)} минут`, 'success');
+        }
+        else {
+            showMessage(`Не удалось получить настройку ${slug}`, 'error');
+        }
+    }
+    return settings;
+}
 
 const StatusEnum = {
     'booked': 'booked',
@@ -56,7 +77,7 @@ async function createTimePeriods() {
 
     const startTime = document.getElementById("start-time").value;
     const endTime = document.getElementById("end-time").value;
-    const intervalMinutes = 15;
+    const intervalMinutes = parseInt(settings.get(time_period_slug).value);
 
     const start = new Date();
     const end = new Date();
