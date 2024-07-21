@@ -19,16 +19,36 @@
         <span id="username" style="float:right; color:white; padding: 14px 16px;"></span>
     </div>
 
-    <h1>Create Time Periods</h1>
-    
-    <label for="start-time">Start Time:</label>
-    <input type="time" id="start-time" name="start-time" value="10:00">
-    
-    <label for="end-time">End Time:</label>
-    <input type="time" id="end-time" name="end-time" value="21:00">
+    <div class="container">
+        <h1>Create Time Periods</h1>
 
-    <button id="create-time-periods">Create Time Periods</button>
+        <div class="form-group" id="time-selection">
+            <label for="start-time">Start Time:</label>
+            <input type="time" id="start-time" name="start-time" value="10:00">
+        </div>
 
-    <div id="message-container"></div>
+        <div class="form-group" id="time-selection">
+            <label for="end-time">End Time:</label>
+            <input type="time" id="end-time" name="end-time" value="21:00">
+        </div>
+
+        <div class="form-group" id="time-selection">
+            <label for="start-time">Time interval (minutes):</label>
+            <input type="time" id="interval-time" name="interval-time" value="00:15">
+        </div>
+
+        <div class="form-group">
+            <label for="use-db-settings">
+                <input type="checkbox" id="use-db-settings" name="use-db-settings">
+                Использовать настройки из базы данных
+            </label>
+        </div>
+
+        <div class="form-group">
+            <button id="create-time-periods">Create Time Periods</button>
+        </div>
+
+        <div id="message-container"></div>
+    </div>
 </body>
 </html>

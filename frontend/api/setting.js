@@ -109,4 +109,17 @@ export class Setting {
         }
         return null;
     }
+
+    /**
+     * Получает настройки из переданного списка слагов.
+     */
+    static async get_settings_by_slugs(slug_list, token){
+        var settings = new Map();
+
+        for (var slug of slug_list) {
+            var setting_json = await Setting.getSettingBySlug(slug, token);
+            settings.set(slug, setting_json);
+        }
+        return settings;
+    }
 }

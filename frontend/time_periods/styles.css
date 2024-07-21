@@ -1,16 +1,19 @@
 body {
     font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 .menu {
     background-color: #808080; /* Серый цвет */
     overflow: hidden;
     padding: 10px 0;
+    text-align: center;
 }
 
 .menu a {
-    float: left;
-    display: block;
+    display: inline-block;
     color: white;
     text-align: center;
     padding: 14px 16px;
@@ -22,90 +25,59 @@ body {
     transition: background-color 0.3s;
 }
 
-h1, h2 {
-    color: #404040; /* Темно-серый для заголовков */
-}
-
 .container {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
 }
 
-.pc-block {
+h1 {
+    color: #404040; /* Темно-серый для заголовков */
+    text-align: center;
+}
+
+.form-group {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 60px;
-    height: 40px;
-    background-color: #f2f2f2;
-    color: #333;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+label {
+    margin-bottom: 5px;
     font-weight: bold;
-    margin-right: 10px;
-    margin-bottom: 3px;
-    border-radius: 10px;
-    border: 2px solid #555;
-    align-self: stretch;
 }
 
-.time-slot {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+input[type="time"],
+input[type="checkbox"],
+button {
     padding: 10px;
-    margin: 3px;
-    width: 23px;
-    height: 10px;
-    border-radius: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #404040;
     color: white;
     cursor: pointer;
-    transition: background-color 0.3s ease;
 }
 
-.time-slot:not(:first-child) {
-    border: 2px solid #7c7979; 
+button:hover {
+    background-color: #575757;
+    transition: background-color 0.3s;
 }
 
-.time-slot-green {
-    background-color: #62c46c;
-}
-
-.time-slot-black {
-    color: white;
-    background-color: #000000;
-    color: white;
-}
-
-.time-slot-red {
-    background-color: #cd3d3d;
-}
-
-.time-slot-yellow {
-    background-color: #dcd917;
-}
-
-.time-slot-green:hover {
-    background-color: #3e8e41;
-}
-
-.time-slot-red:hover {
-    background-color: #9e3a3a;
-}
-
-.time-slot-yellow:hover {
-    background-color: #76751d;
-}
-
-.time-slot-black:hover {
-    background-color: #000000;
+#message-container {
+    margin-top: 20px;
 }
 
 .success {
     color: green;
-    margin-top: 20px;
 }
 
 .error {
     color: red;
-    margin-top: 20px;
 }
