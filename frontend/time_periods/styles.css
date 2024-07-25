@@ -3,16 +3,43 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    padding: 8px; /* Добавляем отступ от краев страницы */
 }
 
 .menu {
     background-color: #808080; /* Серый цвет */
     overflow: hidden;
     padding: 10px 0;
+}
+
+.submenu {
+    background-color: #f2f2f2; /* Темно-серый цвет */
+    overflow: hidden;
+    padding: 10px 0;
+    margin-top: 10px; /* Отступ сверху */
+}
+
+.submenu a {
+    float: left;
+    display: block;
+    color: rgb(0, 0, 0);
     text-align: center;
+    padding: 10px 14px;
+    text-decoration: none;
+}
+
+.submenu a:hover {
+    background-color: #b5b1b1; /* Еще темнее при наведении */
+    transition: background-color 0.3s;
+}
+
+h1, h2 {
+    color: #404040; /* Темно-серый для заголовков */
 }
 
 .menu a {
+    float: left;
+    display: block;
     display: inline-block;
     color: white;
     text-align: center;
@@ -36,7 +63,7 @@ body {
 
 h1 {
     color: #404040; /* Темно-серый для заголовков */
-    text-align: center;
+
 }
 
 .form-group {
