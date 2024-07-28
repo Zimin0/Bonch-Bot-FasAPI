@@ -4,6 +4,7 @@ from db.base_class import Base
 from enum import Enum as PyEnum
 from datetime import time
 from sqlalchemy.orm import Session
+from datetime import datetime
 
 class StatusEnum(PyEnum):
     booked = "booked"
@@ -22,9 +23,28 @@ class TimePeriod(BaseTimePeriod, Base):
     #         raise ValueError(f"Invalid status for TimePeriod. Valid are: {', '.join(all_statuses)}")
     #     self._status = value
 
+    @property
+    def is_free(self):
+        """ Свободен ли временной промежуток. """
+        return self.status == StatusEnum.free
+
     def is_it_in_time_gap(self, start_session:time, end_session:time) -> bool:
         """ Проверяет, входит ли временной промежуток в сессию. """
         return (self.time_start >= start_session) and (self.time_end <= end_session) 
+    
+    @staticmethod
+    def count_session_length(time_start: time, time_end: time) -> int:
+        """Вычисляет длину промежутка в секундах."""
+        time_format = '%H:%M'
+        
+        # Convert time objects to strings
+        time_start_str = time_start.strftime(time_format)
+        time_end_str = time_end.strftime(time_format)
+        
+        start = datetime.strptime(time_start_str, time_format)
+        end = datetime.strptime(time_end_str, time_format)
+        delta = end - start
+        return int(delta.total_seconds())
 
     @staticmethod
     def set_status_to_time_periods(db:Session, time_periods:list["TimePeriod"], status:str, start:time, end:time, mark_post_last_as_break:bool=False) -> None:
@@ -46,7 +66,8 @@ class TimePeriod(BaseTimePeriod, Base):
                 db.refresh(period)
             else:
                 if is_session_started:
-                    period.status = "break_between_bookings"
+                    if mark_post_last_as_break: # Занимаем последний промежут для перерыва только когда бронируем.
+                        period.status = "break_between_bookings"
                     db.commit()
                     db.refresh(period)
                     break

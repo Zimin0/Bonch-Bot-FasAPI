@@ -1,9 +1,19 @@
 from sqlalchemy.orm import Session
 from db.models.session import PC_Session
-from schemas.session import SessionCreate, SessionUpdate
+from db.models.time_period import TimePeriod
+from schemas.session import SessionCreate
 from db.models.user import User
 from db.models.pc import PC
 from db.models.time_period import TimePeriod
+
+def read_session_time_periods(db:Session, pc_session: SessionCreate):
+    """ READ all session's time periods. """
+    session_time_periods = []
+    pc_time_periods = db.query(TimePeriod).filter(TimePeriod.pc_physical_number == pc_session.pc_physical_number).all()
+    for tp in pc_time_periods:
+        if tp.is_it_in_time_gap(pc_session.time_start, pc_session.time_end):
+            session_time_periods.append(tp)
+    return session_time_periods
 
 def read_all_sessions_db(db: Session):
     """ READ all sessions. """
@@ -19,23 +29,24 @@ def create_session_db(pc_session: SessionCreate, db: Session):
     if not user:
         return None
 
-    pc_in_db = db.query(PC).filter(PC.id == pc_session.computer_id).first()
+    pc_in_db = db.query(PC).filter(PC.physical_number == pc_session.pc_physical_number).first()
     if not pc_in_db.ready_to_use:
         return None
 
-    pc_time_periods = db.query(TimePeriod).filter(TimePeriod.computer_id == pc_session.computer_id).all()
+    pc_time_periods = db.query(TimePeriod).filter(TimePeriod.pc_physical_number == pc_session.pc_physical_number).all()
     TimePeriod.set_status_to_time_periods(
         db=db,
         time_periods=pc_time_periods,
         status="booked",
         start=pc_session.time_start,
-        end=pc_session.time_end
+        end=pc_session.time_end,
+        mark_post_last_as_break=True
     )
 
     db_pc_session = PC_Session(
         time_start=pc_session.time_start,
         time_end=pc_session.time_end,
-        computer_id=pc_session.computer_id,
+        pc_physical_number=pc_session.pc_physical_number,
         tg_tag=pc_session.tg_tag
     )
     db.add(db_pc_session)
@@ -49,7 +60,7 @@ def delete_session_db(session_id: int, db: Session):
     if db_session is None:
         return None
 
-    pc_time_periods = db.query(TimePeriod).filter(TimePeriod.computer_id == db_session.computer_id).all()
+    pc_time_periods = db.query(TimePeriod).filter(TimePeriod.pc_physical_number == db_session.pc_physical_number).all()
     TimePeriod.set_status_to_time_periods(
         db=db,
         time_periods=pc_time_periods,

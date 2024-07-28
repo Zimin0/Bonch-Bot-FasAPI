@@ -3,11 +3,13 @@ from fastapi.responses import HTMLResponse
 from fastapi import FastAPI, Request, APIRouter, Depends
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi.templating import Jinja2Templates
+from contextlib import asynccontextmanager
 from fastapi.exception_handlers import http_exception_handler
 from core.config import project_settings
 from db.session import engine
 from fastapi.middleware.cors import CORSMiddleware
 from db.base import Base    
+import aioredis
 
 from apis.base import api_router
 
@@ -19,13 +21,23 @@ def create_tables():
 def include_router(app):   
 	app.include_router(api_router)
 
-def start_application():
-    app = FastAPI(title=project_settings.PROJECT_NAME, version=project_settings.PROJECT_VERSION)
+def start_application(lifespan=None):
+    app = FastAPI(
+        title=project_settings.PROJECT_NAME, 
+        version=project_settings.PROJECT_VERSION, 
+        lifespan=lifespan
+        )
     create_tables()
     include_router(app)
     return app
 
-app = start_application()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    app.state.redis = aioredis.from_url("redis://localhost", encoding="utf-8", decode_responses=True)
+    yield
+    await app.state.redis.close()
+
+app = start_application(lifespan=lifespan)
 
 # origins = [
 #     "http://localhost:8080",
